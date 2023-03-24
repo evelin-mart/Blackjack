@@ -1,6 +1,27 @@
 # Blackjack classic
 
-## Specification   
+## Specification
+
+### **Lobby**
+
+---
+
+* for unregistered user there is buttons Register, Log in
+  * click on Register opens register form. Form contains: 
+    * username text input (check for length to be more than 3)
+    * password input (length >= 8, numbers and caps)
+    * checkbox confirm the user is over 18yo
+  * after registration save user data to local storage
+  * redirect to wallet settings
+    * select currency
+    * button to add balance (20 for start)
+  * settings are saved in local storage
+  * click on Log in opens login form with username and password. On submit tries get data from local storage and compare it.
+* for registered user 3 buttons:
+  * play
+  * wallet
+  * log out
+* user balance is displayed on the top
 
 ### **Header**
 
