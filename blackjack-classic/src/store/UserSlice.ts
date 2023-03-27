@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Currencies } from '../types/Currencies';
+import { Currencies } from '../constants/Currencies';
 
 interface User {
   name: string;

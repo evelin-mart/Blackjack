@@ -1,4 +1,7 @@
-import { Card, Rank, Suit } from '../types/Card';
+import { shuffle } from 'lodash';
+import { Card } from '../types/Card';
+import { Rank, Suit } from '../constants/Suits';
+import { decksInGameCount } from '../constants/Deck';
 
 export class Deck {
   static readonly _deck: Card[] = (Object.keys(Rank) as unknown[] as (keyof typeof Rank)[])
@@ -12,6 +15,6 @@ export class Deck {
     .flat();
 
   static shuffle(): Card[] {
-    return Array(6).fill(this._deck);
+    return shuffle(Array(decksInGameCount).fill(this._deck));
   }
 }
