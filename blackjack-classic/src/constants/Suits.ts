@@ -6,7 +6,7 @@ export const Suit = {
 } as const;
 
 export const Rank = {
-    Ace: 1,
+    Ace: 11,
     Two: 2,
     Three: 3,
     Four: 4,

@@ -7,7 +7,7 @@ export interface Player {
     blackjackCount: number;
     lastBet: number;
     lastWin: number;
-    doubleSeat: null | {
+    secondSeat: null | {
         score: number;
         cards: Card[];
     };
@@ -21,4 +21,14 @@ export interface Game {
         score: number;
         cards: Card[];
     };
+}
+
+export enum PlayingSeat {
+    Player,
+    Second,
+    Dealer,
+}
+
+export interface endGameAction {
+    win: number | null;
 }

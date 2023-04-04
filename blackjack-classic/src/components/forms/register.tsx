@@ -3,6 +3,7 @@ import { useAppDispatch } from '../../store';
 import { login, logout } from '../../store/user';
 import { Currencies } from '../../constants/currencies';
 import { hitCard } from '../../store/game';
+import { PlayingSeat } from '../../store/game/types';
 
 const Register = () => {
     const dispatch = useAppDispatch();
@@ -24,7 +25,7 @@ const Register = () => {
                 }>
                 register
             </button>
-            <button onClick={() => dispatch(hitCard())}>unregister</button>
+            <button onClick={() => dispatch(hitCard(PlayingSeat.Player))}>unregister</button>
         </>
     );
 };
