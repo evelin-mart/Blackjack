@@ -1,27 +1,31 @@
 import { shuffle } from 'lodash';
-import { DeckType } from '../types/deck';
 import { Rank, Suit } from '../constants/suits';
 import { decksInGameCount } from '../constants/deck';
+import { Card } from '../types/deck';
 
 const getRandomNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min)) + min;
 };
 
 export class Deck {
-    static readonly _deck: DeckType = (Object.keys(Rank) as unknown[] as (keyof typeof Rank)[])
+    static readonly _ranks = Object.keys(Rank) as (keyof typeof Rank)[];
+    static readonly _suits = Object.keys(Suit) as (keyof typeof Suit)[];
+    static readonly _deck: Card[] = this._ranks
         .map((rank) => {
-            return (Object.keys(Suit) as unknown[] as (keyof typeof Suit)[]).map((suit) => ({
+            return this._suits.map((suit) => ({
                 rank,
                 suit,
             }));
         })
         .flat();
 
-    static shuffle(): DeckType {
+    static shuffle(): Card[] {
         const decs = shuffle(Array(decksInGameCount).fill(this._deck).flat());
-        const middle = decs.length / 2;
-        const redCardPos = getRandomNumber(middle - 5, middle + 5);
-        decs.splice(redCardPos, 0, null);
         return decs;
+    }
+
+    static getRedCardPos(): number {
+        const middle = (this._deck.length * decksInGameCount) / 2;
+        return getRandomNumber(middle - 10, middle + 10);
     }
 }

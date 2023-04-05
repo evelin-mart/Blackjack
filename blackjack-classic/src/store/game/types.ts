@@ -1,4 +1,4 @@
-import { Card, DeckType } from '../../types/deck';
+import { Card } from '../../types/deck';
 
 export interface Player {
     bet: number;
@@ -14,8 +14,8 @@ export interface Player {
 }
 
 export interface Game {
-    isRedCardReached: boolean;
-    deck: DeckType;
+    redCardPos: number;
+    deck: Card[];
     player: Player;
     dealer: {
         score: number;

@@ -19,7 +19,7 @@ const initialDealer = {
 };
 
 const initialState: Game = {
-    isRedCardReached: false,
+    redCardPos: Deck.getRedCardPos(),
     deck: Deck.shuffle(),
     player: initialPlayer,
     dealer: initialDealer,
@@ -53,8 +53,6 @@ export const GameSlice = createSlice({
         },
         hitCard(state, action: PayloadAction<PlayingSeat>) {
             let card = state.deck.pop();
-            state.isRedCardReached = card ? false : true;
-            if (!card) card = state.deck.pop();
             switch (action.payload) {
                 case PlayingSeat.Player: {
                     state.player.cards.push(card!);
@@ -78,8 +76,8 @@ export const GameSlice = createSlice({
             state.player.lastWin = action.payload.win ? action.payload.win : state.player.lastWin;
         },
         shuffleDeck(state) {
-            state.isRedCardReached = false;
             state.deck = Deck.shuffle();
+            state.redCardPos = Deck.getRedCardPos();
         },
         blackJack(state) {
             state.player.blackjackCount += 1;
@@ -96,7 +94,7 @@ export const GameSlice = createSlice({
                 },
                 dealer: initialDealer,
             };
-        }
+        },
     },
 });
 
