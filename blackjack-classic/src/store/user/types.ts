@@ -1,7 +1,7 @@
 import { Currencies } from '../../constants/currencies';
 
 export interface User {
-    name: string;
+    login: string;
     currency: Currencies;
     balance: {
         [x in Currencies]: number;

@@ -10,11 +10,8 @@ export const UserSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        login(_, action: PayloadAction<User>) {
+        authorize(_, action: PayloadAction<User>) {
             return { isAuth: true, ...action.payload };
-        },
-        updateUserName(state, action: PayloadAction<string>) {
-            state.name = action.payload;
         },
         changeCurrency(state, action: PayloadAction<Currencies>) {
             state.currency = action.payload;
@@ -31,5 +28,5 @@ export const UserSlice = createSlice({
     },
 });
 
-export const { addBalance, login, changeCurrency, reduceBalance, updateUserName, logout } =
+export const { addBalance, authorize, changeCurrency, reduceBalance, logout } =
     UserSlice.actions;

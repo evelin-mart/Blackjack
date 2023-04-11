@@ -1,6 +1,6 @@
 import { Card } from '../../types/deck';
 
-export interface Game {
+export interface GameState {
     redCardPos: number;
     deck: Card[];
     seats: Seat[];

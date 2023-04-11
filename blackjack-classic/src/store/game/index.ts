@@ -1,33 +1,40 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Deck } from '../../utils/deck';
-import { AddBetAction, Game, Player, PlayerBets } from './types';
+import { AddBetAction, GameState, Player, PlayerBets } from './types';
 import { calculateScore } from './utils';
 
-const initialBets: PlayerBets = {
-    seatId: 1,
-    bet: 0,
-};
+const initialBets = [
+    {
+        seatId: 1,
+        bet: 0,
+    },
+];
 
 const initialPlayer: Player = {
     blackjackCount: 0,
     lastBet: 0,
     lastWin: 0,
-    bets: [initialBets],
+    bets: initialBets,
 };
 
-const initialSeat = {
-    score: 0,
-    cards: [],
-};
+const initialSeats = [
+    {
+        id: 0,
+        score: 0,
+        cards: [],
+    },
+    {
+        id: 1,
+        score: 0,
+        cards: [],
+    },
+];
 
-const initialState: Game = {
+const initialState: GameState = {
     redCardPos: Deck.getRedCardPos(),
     deck: Deck.shuffle(),
     player: initialPlayer,
-    seats: [
-        { id: 0, ...initialSeat },  //dealer
-        { id: 1, ...initialSeat },  //player
-    ],
+    seats: initialSeats,
 };
 
 export const GameSlice = createSlice({
@@ -79,6 +86,8 @@ export const GameSlice = createSlice({
             if (action.payload) {
                 state.player.lastWin = action.payload;
             }
+            state.seats = initialSeats;
+            state.player.bets = initialBets;
         },
         shuffleDeck(state) {
             state.deck = Deck.shuffle();
@@ -87,15 +96,8 @@ export const GameSlice = createSlice({
         blackJack(state) {
             state.player.blackjackCount += 1;
         },
-        startGame(state) {
-            state = {
-                ...state,
-                player: {
-                    ...state.player,
-                },
-            };
-        },
     },
 });
 
-export const { addBet, clearBet, hitCard, restoreBet, splitPair } = GameSlice.actions;
+export const { addBet, clearBet, hitCard, restoreBet, splitPair, blackJack, endGame, shuffleDeck } =
+    GameSlice.actions;
