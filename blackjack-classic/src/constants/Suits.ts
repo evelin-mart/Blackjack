@@ -1,11 +1,31 @@
-export const Suit = {
-    Club: 'Club',
-    Diamond: 'Diamond',
-    Heart: 'Heart',
-    Spade: 'Spade',
-} as const;
+export enum Suit {
+    Club = 'Club',
+    Diamond = 'Diamond',
+    Heart = 'Heart',
+    Spade = 'Spade',
+};
 
-export const Rank = {
+export enum Rank {
+    Ace ='Ace',
+    Two = 'Two',
+    Three ='Three',
+    Four = 'Four',
+    Five = 'Five',
+    Six = 'Six',
+    Seven = 'Seven',
+    Eight = 'Eight',
+    Nine = 'Nine',
+    Ten = 'Ten',
+    Jack = 'Jack',
+    Queen = 'Queen',
+    King = 'King',
+};
+
+type Cost = {
+    [x in keyof typeof Rank]: number;
+};
+
+export const Cost: Cost = {
     Ace: 11,
     Two: 2,
     Three: 3,

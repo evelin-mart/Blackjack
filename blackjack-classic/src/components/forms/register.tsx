@@ -25,7 +25,7 @@ const Register = () => {
                 }>
                 register
             </button>
-            <button onClick={() => dispatch(hitCard(PlayingSeat.Player))}>unregister</button>
+            <button onClick={() => dispatch(hitCard(PlayingSeat.Player))}>hit card</button>
         </>
     );
 };

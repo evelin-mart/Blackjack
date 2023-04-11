@@ -1,85 +1,88 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Deck } from '../../utils/deck';
-import { Game, Player, PlayingSeat, endGameAction } from './types';
+import { AddBetAction, Game, Player, PlayerBets } from './types';
 import { calculateScore } from './utils';
 
-const initialPlayer: Player = {
+const initialBets: PlayerBets = {
+    seatId: 1,
     bet: 0,
+};
+
+const initialPlayer: Player = {
     blackjackCount: 0,
     lastBet: 0,
     lastWin: 0,
-    cards: [],
-    score: 0,
-    secondSeat: null,
+    bets: [initialBets],
 };
 
-const initialDealer = {
+const initialSeat = {
     score: 0,
     cards: [],
 };
 
 const initialState: Game = {
-    isRedCardReached: false,
+    redCardPos: Deck.getRedCardPos(),
     deck: Deck.shuffle(),
     player: initialPlayer,
-    dealer: initialDealer,
+    seats: [
+        { id: 0, ...initialSeat },  //dealer
+        { id: 1, ...initialSeat },  //player
+    ],
 };
 
 export const GameSlice = createSlice({
     name: 'game',
     initialState,
     reducers: {
-        addBet(state, action: PayloadAction<number>) {
-            state.player.bet += action.payload;
+        addBet(state, action: PayloadAction<AddBetAction>) {
+            const { id, bet } = action.payload;
+            state.player.bets = state.player.bets.map((seat) =>
+                seat.seatId === id ? { ...seat, bet: seat.bet + bet } : seat,
+            );
         },
         restoreBet(state) {
-            state.player.bet = state.player.lastBet;
+            state.player.bets = state.player.bets.map((seat) => ({
+                ...seat,
+                bet: state.player.lastBet,
+            }));
         },
         clearBet(state) {
-            state.player.bet = 0;
+            state.player.bets = state.player.bets.map((seat) => ({
+                ...seat,
+                bet: 0,
+            }));
         },
-        splitPair(state) {
-            const [card1, card2] = state.player.cards;
-            const score = state.player.score / 2;
-            state.player = {
-                ...state.player,
+        splitPair(state, action: PayloadAction<number>) {
+            const seat = state.seats.find((seat) => seat.id === action.payload)!;
+            const card = seat.cards.pop()!;
+            const score = seat.score / 2;
+            const id = +Date.now();
+            seat.score /= 2;
+            state.seats.push({
+                id,
                 score,
-                cards: [card1],
-                secondSeat: {
-                    score,
-                    cards: [card2],
-                },
-            };
+                cards: [card],
+            });
+            state.player.bets.push({
+                seatId: id,
+                bet: state.player.bets.find((seat) => seat.seatId === action.payload)!.bet,
+            });
         },
-        hitCard(state, action: PayloadAction<PlayingSeat>) {
-            let card = state.deck.pop();
-            state.isRedCardReached = card ? false : true;
-            if (!card) card = state.deck.pop();
-            switch (action.payload) {
-                case PlayingSeat.Player: {
-                    state.player.cards.push(card!);
-                    state.player.score = calculateScore(state.player.cards);
-                    break;
-                }
-                case PlayingSeat.Second: {
-                    state.player.secondSeat!.cards.push(card!);
-                    state.player.secondSeat!.score = calculateScore(state.player.secondSeat!.cards);
-                    break;
-                }
-                case PlayingSeat.Dealer: {
-                    state.dealer.cards.push(card!);
-                    state.dealer.score = calculateScore(state.dealer.cards);
-                    break;
-                }
+        hitCard(state, action: PayloadAction<number>) {
+            const card = state.deck.pop()!;
+            const seat = state.seats.find((seat) => seat.id === action.payload)!;
+            seat.cards.push(card);
+            seat.score = calculateScore(seat.cards);
+        },
+        endGame(state, action: PayloadAction<number | undefined>) {
+            state.player.lastBet = state.player.bets[0].bet;
+            if (action.payload) {
+                state.player.lastWin = action.payload;
             }
         },
-        endGame(state, action: PayloadAction<endGameAction>) {
-            state.player.lastBet = state.player.bet;
-            state.player.lastWin = action.payload.win ? action.payload.win : state.player.lastWin;
-        },
         shuffleDeck(state) {
-            state.isRedCardReached = false;
             state.deck = Deck.shuffle();
+            state.redCardPos = Deck.getRedCardPos();
         },
         blackJack(state) {
             state.player.blackjackCount += 1;
@@ -89,14 +92,9 @@ export const GameSlice = createSlice({
                 ...state,
                 player: {
                     ...state.player,
-                    bet: 0,
-                    cards: [],
-                    score: 0,
-                    secondSeat: null,
                 },
-                dealer: initialDealer,
             };
-        }
+        },
     },
 });
 

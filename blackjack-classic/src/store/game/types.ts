@@ -1,34 +1,35 @@
-import { Card, DeckType } from '../../types/deck';
+import { Card } from '../../types/deck';
 
-export interface Player {
-    bet: number;
+export interface Game {
+    redCardPos: number;
+    deck: Card[];
+    seats: Seat[];
+    player: Player;
+}
+
+export interface Seat {
+    id: number;
     score: number;
     cards: Card[];
+}
+
+export interface Player {
     blackjackCount: number;
     lastBet: number;
     lastWin: number;
-    secondSeat: null | {
-        score: number;
-        cards: Card[];
-    };
+    bets: PlayerBets[];
 }
 
-export interface Game {
-    isRedCardReached: boolean;
-    deck: DeckType;
-    player: Player;
-    dealer: {
-        score: number;
-        cards: Card[];
-    };
+export interface PlayerBets {
+    seatId: number;
+    bet: number;
 }
 
-export enum PlayingSeat {
-    Player,
-    Second,
-    Dealer,
+export interface AddBetAction {
+    id: number;
+    bet: number;
 }
 
 export interface endGameAction {
-    win: number | null;
+    win: number | undefined;
 }
