@@ -5,6 +5,7 @@ export interface GameState {
     deck: Card[];
     seats: Seat[];
     player: Player;
+    playingSeat: number;
 }
 
 export interface Seat {
@@ -14,22 +15,19 @@ export interface Seat {
 }
 
 export interface Player {
-    blackjackCount: number;
     lastBet: number;
     lastWin: number;
+    blackjackCount: number;
     bets: PlayerBets[];
 }
 
 export interface PlayerBets {
     seatId: number;
     bet: number;
+    win: number | null;
 }
 
 export interface AddBetAction {
     id: number;
     bet: number;
-}
-
-export interface endGameAction {
-    win: number | undefined;
 }

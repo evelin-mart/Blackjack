@@ -1,38 +1,33 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Deck } from '../../utils/deck';
-import { AddBetAction, GameState, Player, PlayerBets } from './types';
-import { calculateScore } from './utils';
+import { AddBetAction, GameState, Player, PlayerBets, Seat } from './types';
+import { calculateScore, calculateWin } from './utils';
 
-const initialBets = [
-    {
-        seatId: 1,
-        bet: 0,
-    },
-];
+const initialBets: PlayerBets = {
+    seatId: 1,
+    bet: 0,
+    win: null,
+};
 
 const initialPlayer: Player = {
     blackjackCount: 0,
     lastBet: 0,
     lastWin: 0,
-    bets: initialBets,
+    bets: [initialBets],
 };
 
-const initialSeats = [
-    {
-        id: 0,
+const initialSeats: Seat[] = Array(2)
+    .fill(null)
+    .map((_, idx) => ({
+        id: idx,
         score: 0,
         cards: [],
-    },
-    {
-        id: 1,
-        score: 0,
-        cards: [],
-    },
-];
+    }));
 
 const initialState: GameState = {
     redCardPos: Deck.getRedCardPos(),
     deck: Deck.shuffle(),
+    playingSeat: 1,
     player: initialPlayer,
     seats: initialSeats,
 };
@@ -63,7 +58,7 @@ export const GameSlice = createSlice({
             const seat = state.seats.find((seat) => seat.id === action.payload)!;
             const card = seat.cards.pop()!;
             const score = seat.score / 2;
-            const id = +Date.now();
+            const id = state.seats.length;
             seat.score /= 2;
             state.seats.push({
                 id,
@@ -71,6 +66,7 @@ export const GameSlice = createSlice({
                 cards: [card],
             });
             state.player.bets.push({
+                ...initialBets,
                 seatId: id,
                 bet: state.player.bets.find((seat) => seat.seatId === action.payload)!.bet,
             });
@@ -81,13 +77,14 @@ export const GameSlice = createSlice({
             seat.cards.push(card);
             seat.score = calculateScore(seat.cards);
         },
-        endGame(state, action: PayloadAction<number | undefined>) {
-            state.player.lastBet = state.player.bets[0].bet;
-            if (action.payload) {
-                state.player.lastWin = action.payload;
-            }
-            state.seats = initialSeats;
-            state.player.bets = initialBets;
+        endGame(state) {
+            state.player.bets = state.player.bets.map((bet) => {
+                const seat = state.seats.find((seat) => seat.id === bet.seatId)!;
+                return {
+                    ...bet,
+                    win: calculateWin(state.seats[0], seat, bet.bet),
+                };
+            });
         },
         shuffleDeck(state) {
             state.deck = Deck.shuffle();
