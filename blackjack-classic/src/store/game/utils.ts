@@ -22,26 +22,26 @@ export const calculateWin = (dealerSeat: Seat, playerSeat: Seat, bet: number) =>
     const playerBlackjack = playerScore === 21 && playerSeat.cards.length === 2;
 
     if (playerScore > 21) {
-        return -bet;
+        return 0;
     }
     if (dealerScore > 21) {
         if (playerBlackjack) {
-            return bet * 1.5;
+            return bet * 1.5 * 2;
         }
-        return bet;
+        return bet * 2;
     }
     if (playerScore < dealerScore) {
-        return -bet;
+        return 0;
     }
     if (playerScore === dealerScore) {
         if (dealerBlackjack && !playerBlackjack) {
-            return -bet;
-        }
-        return 0;
-    } else {
-        if (playerBlackjack) {
-            return bet * 1.5;
+            return 0;
         }
         return bet;
+    } else {
+        if (playerBlackjack) {
+            return bet * 1.5 * 2;
+        }
+        return bet * 2;
     }
 };

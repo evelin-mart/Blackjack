@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useGame } from '../store';
 import { Cost } from '../constants/suits';
-import { hitCard } from '../store/game';
+import { endGame, hitCard } from '../store/game';
 
 export const useDealer = () => {
     const dispatch = useAppDispatch();
@@ -12,18 +12,13 @@ export const useDealer = () => {
     useEffect(() => {
         if (playingSeat === 0) {
             setShownScore(score);
-        }
-    }, [playingSeat]);
-
-    useEffect(() => {
-        if (playingSeat === 0) {
-            if (score <= 16) {
+            if (score < 17) {
                 dispatch(hitCard(0));
             } else {
-                //game over
+                dispatch(endGame());
             }
         }
-    }, [cards, score]);
+    }, [playingSeat, cards, score]);
 
     return { shownScore };
 };

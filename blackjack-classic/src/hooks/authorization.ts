@@ -8,7 +8,7 @@ import {
     getUserFromLocalStorage,
     saveTokenToLocalStorage,
     saveUserToLocalStorage,
-} from '../utils/localStarage';
+} from '../utils/localStorage';
 
 export const useAuthorization = () => {
     const dispatch = useAppDispatch();

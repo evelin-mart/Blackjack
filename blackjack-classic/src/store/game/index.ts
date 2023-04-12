@@ -78,13 +78,20 @@ export const GameSlice = createSlice({
             seat.score = calculateScore(seat.cards);
         },
         endGame(state) {
+            let lastWin = 0;
+            let lastBet = state.player.lastBet;
             state.player.bets = state.player.bets.map((bet) => {
+                lastBet = bet.bet;
                 const seat = state.seats.find((seat) => seat.id === bet.seatId)!;
+                const win = calculateWin(state.seats[0], seat, bet.bet);
+                lastWin += win;
                 return {
                     ...bet,
-                    win: calculateWin(state.seats[0], seat, bet.bet),
+                    win,
                 };
             });
+            state.player.lastWin = lastWin;
+            state.player.lastBet = lastBet;
         },
         shuffleDeck(state) {
             state.deck = Deck.shuffle();

@@ -15,7 +15,7 @@ export const useSeatState = (id: number) => {
     const [seatState, setSeatState] = useState<SeatState | ''>('');
     const { seats, player } = useGame();
     const { cards, score } = seats.find((seat) => seat.id === id)!;
-    const { win } = player.bets.find((seat) => seat.seatId === id)!;
+    const { win, bet } = player.bets.find((seat) => seat.seatId === id)!;
 
     useEffect(() => {
         if (cards.length === 2 && score === 21) {
@@ -25,19 +25,20 @@ export const useSeatState = (id: number) => {
         if (score > 21) {
             setSeatState(SeatState.BUST);
         }
-    }, [cards, score]);
-
-    useEffect(() => {
         if (win && win > 0) {
-            setSeatState(SeatState.WIN);
+            if (!seatState) {
+                setSeatState(SeatState.WIN);
+            }
         }
-        if (win && win === 0) {
+        if (win && win === bet) {
             setSeatState(SeatState.PUSH);
         }
-        if (win && win < 0) {
-            setSeatState(SeatState.LOSE);
+        if (win !== null && win === 0) {
+            if (!seatState) {
+                setSeatState(SeatState.LOSE);
+            }
         }
-    }, [win]);
+    }, [cards, score, win]);
 
     return { seatState, score };
 };
