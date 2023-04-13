@@ -1,6 +1,6 @@
 import { Cost, Rank } from '../../constants/suits';
 import { Card } from '../../types/deck';
-import { Seat } from './types';
+import { PlayerBets, Seat, SeatState, WinStatus } from './types';
 
 export const calculateScore = (cards: Card[]) => {
     let sum = cards.reduce((sum, card) => sum + Cost[card.rank], 0);
@@ -22,26 +22,69 @@ export const calculateWin = (dealerSeat: Seat, playerSeat: Seat, bet: number) =>
     const playerBlackjack = playerScore === 21 && playerSeat.cards.length === 2;
 
     if (playerScore > 21) {
-        return 0;
+        return {
+            win: 0,
+            status: SeatState.BUST,
+        };
     }
     if (dealerScore > 21) {
         if (playerBlackjack) {
-            return bet * 1.5 * 2;
+            return {
+                win: bet * 1.5 * 2,
+                status: SeatState.BJ,
+            };
         }
-        return bet * 2;
+        return {
+            win: bet * 2,
+            status: SeatState.WIN,
+        };
     }
     if (playerScore < dealerScore) {
-        return 0;
+        return {
+            win: 0,
+            status: SeatState.LOSE,
+        };
     }
     if (playerScore === dealerScore) {
         if (dealerBlackjack && !playerBlackjack) {
-            return 0;
+            return {
+                win: 0,
+                status: SeatState.LOSE,
+            };
         }
-        return bet;
+        return {
+            win: bet,
+            status: SeatState.PUSH,
+        };
     } else {
         if (playerBlackjack) {
-            return bet * 1.5 * 2;
+            return {
+                win: bet * 1.5 * 2,
+                status: SeatState.BJ,
+            };
         }
-        return bet * 2;
+        return {
+            win: bet * 2,
+            status: SeatState.WIN,
+        };
     }
+};
+
+export const calculateWinStatus = (playerBets: PlayerBets[]) => {
+    let status: WinStatus = SeatState.LOSE;
+    let sum = 0;
+    playerBets.forEach((bet) => {
+        sum += bet.win!;
+        if (bet.status !== SeatState.LOSE) {
+            if (bet.status !== SeatState.PUSH) {
+                status = SeatState.WIN;
+            } else {
+                if (status !== SeatState.WIN) {
+                    status = SeatState.PUSH;
+                }
+            }
+        }
+    });
+
+    return { status, sum };
 };

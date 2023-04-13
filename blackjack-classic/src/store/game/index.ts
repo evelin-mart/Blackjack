@@ -1,18 +1,22 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Deck } from '../../utils/deck';
-import { AddBetAction, GameState, Player, PlayerBets, Seat } from './types';
-import { calculateScore, calculateWin } from './utils';
+import { AddBetAction, GameState, Player, PlayerBets, Seat, SeatState } from './types';
+import { calculateScore, calculateWin, calculateWinStatus } from './utils';
 
 const initialBets: PlayerBets = {
     seatId: 1,
     bet: 0,
+    status: '',
     win: null,
 };
 
 const initialPlayer: Player = {
     blackjackCount: 0,
     lastBet: 0,
-    lastWin: 0,
+    lastWin: {
+        status: '',
+        sum: 0,
+    },
     bets: [initialBets],
 };
 
@@ -76,32 +80,47 @@ export const GameSlice = createSlice({
             const seat = state.seats.find((seat) => seat.id === action.payload)!;
             seat.cards.push(card);
             seat.score = calculateScore(seat.cards);
+            const playerBet = state.player.bets.find((seat) => seat.seatId === action.payload);
+            if (playerBet) {
+                if (seat.cards.length === 2 && seat.score === 21) {
+                    playerBet.status = SeatState.BJ;
+                }
+                if (seat.score > 21) {
+                    playerBet.status = SeatState.BUST;
+                }
+            }
         },
         endGame(state) {
-            let lastWin = 0;
-            let lastBet = state.player.lastBet;
             state.player.bets = state.player.bets.map((bet) => {
-                lastBet = bet.bet;
                 const seat = state.seats.find((seat) => seat.id === bet.seatId)!;
-                const win = calculateWin(state.seats[0], seat, bet.bet);
-                lastWin += win;
+                const { win, status } = calculateWin(state.seats[0], seat, bet.bet);
                 return {
                     ...bet,
                     win,
+                    status,
                 };
             });
-            state.player.lastWin = lastWin;
-            state.player.lastBet = lastBet;
+            state.player.lastWin = calculateWinStatus(state.player.bets);
+            state.player.lastBet = state.player.bets[0].bet;
         },
-        shuffleDeck(state) {
-            state.deck = Deck.shuffle();
-            state.redCardPos = Deck.getRedCardPos();
+        startGame(state) {
+            if (state.deck.length <= state.redCardPos) {
+                state.deck = Deck.shuffle();
+                state.redCardPos = Deck.getRedCardPos();
+            }
+            state.seats = initialSeats;
+            state.player.bets = [initialBets];
+            state.playingSeat = 1;
         },
         blackJack(state) {
             state.player.blackjackCount += 1;
         },
+        stand(state) {
+            state.playingSeat =
+                state.playingSeat + 1 >= state.seats.length ? 0 : state.playingSeat + 1;
+        },
     },
 });
 
-export const { addBet, clearBet, hitCard, restoreBet, splitPair, blackJack, endGame, shuffleDeck } =
+export const { addBet, clearBet, hitCard, restoreBet, splitPair, blackJack, endGame, startGame, stand } =
     GameSlice.actions;
