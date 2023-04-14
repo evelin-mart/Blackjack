@@ -1,6 +1,6 @@
 import { Cost, Rank } from '../../constants/suits';
 import { Card } from '../../types/deck';
-import { PlayerBets, Seat, SeatState, WinStatus } from './types';
+import { DealerState, Seat, SeatState, WinStatus } from './types';
 
 export const calculateScore = (cards: Card[]) => {
     let sum = cards.reduce((sum, card) => sum + Cost[card.rank], 0);
@@ -15,76 +15,73 @@ export const calculateScore = (cards: Card[]) => {
     return sum;
 };
 
-export const calculateWin = (dealerSeat: Seat, playerSeat: Seat, bet: number) => {
+export const calculateWin = (dealerSeat: DealerState, playerSeat: Seat): WinStatus => {
     const dealerScore = dealerSeat.score;
     const dealerBlackjack = dealerScore === 21 && dealerSeat.cards.length === 2;
     const playerScore = playerSeat.score;
     const playerBlackjack = playerScore === 21 && playerSeat.cards.length === 2;
+    const bet = playerSeat.amount;
 
     if (playerScore > 21) {
         return {
-            win: 0,
+            payout: 0,
             status: SeatState.BUST,
         };
     }
     if (dealerScore > 21) {
         if (playerBlackjack) {
             return {
-                win: bet * 1.5 * 2,
+                payout: bet * 1.5 * 2,
                 status: SeatState.BJ,
             };
         }
         return {
-            win: bet * 2,
+            payout: bet * 2,
             status: SeatState.WIN,
         };
     }
     if (playerScore < dealerScore) {
         return {
-            win: 0,
+            payout: 0,
             status: SeatState.LOSE,
         };
     }
     if (playerScore === dealerScore) {
         if (dealerBlackjack && !playerBlackjack) {
             return {
-                win: 0,
+                payout: 0,
                 status: SeatState.LOSE,
             };
         }
         return {
-            win: bet,
+            payout: bet,
             status: SeatState.PUSH,
         };
     } else {
         if (playerBlackjack) {
             return {
-                win: bet * 1.5 * 2,
+                payout: bet * 1.5 * 2,
                 status: SeatState.BJ,
             };
         }
         return {
-            win: bet * 2,
+            payout: bet * 2,
             status: SeatState.WIN,
         };
     }
 };
 
-export const calculateWinStatus = (playerBets: PlayerBets[]) => {
-    let status: WinStatus = SeatState.LOSE;
-    let sum = 0;
-    playerBets.forEach((bet) => {
-        sum += bet.win!;
-        if (bet.status !== SeatState.LOSE) {
-            if (bet.status !== SeatState.PUSH) {
-                status = SeatState.WIN;
-            } else {
-                if (status !== SeatState.WIN) {
-                    status = SeatState.PUSH;
-                }
-            }
-        }
-    });
+export const calculateWinStatus = (acc: WinStatus, current: WinStatus): WinStatus => {
+    const payout = acc.payout + current.payout;
+    let status = acc.status;
 
-    return { status, sum };
+    if (current.status !== SeatState.LOSE) {
+        if (current.status !== SeatState.PUSH) {
+            status = SeatState.WIN;
+        } else if (status !== SeatState.WIN) {
+            status = SeatState.PUSH;
+        }
+    }
+
+    return { status, payout };
 };

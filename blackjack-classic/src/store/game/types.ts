@@ -1,13 +1,5 @@
 import { Card } from '../../types/deck';
 
-export interface GameState {
-    redCardPos: number;
-    deck: Card[];
-    seats: Seat[];
-    player: Player;
-    playingSeat: number;
-}
-
 export enum SeatState {
     WIN = 'Win',
     LOSE = 'Lose',
@@ -16,42 +8,43 @@ export enum SeatState {
     BJ = 'Blackjack',
 }
 
-export interface Win {
-    type: SeatState;
-    sum: number;
-}
-
 export interface Seat {
     id: number;
     score: number;
     cards: Card[];
+    amount: number;
+    status: SeatState | '';
+    blackjackCount: number;
+    splittedID?: number;
+    originID?: number;
+}
+
+export interface WinStatus {
+    status: SeatState;
+    payout: number;
 }
 
 export interface Player {
+    bets: number[];
     lastBet: number;
-    lastWin: {
-        status: WinStatus | '';
-        sum: number;
+    lastWin?: WinStatus;
+}
+
+export interface DealerState {
+    score: number;
+    cards: Card[];
+}
+
+export interface GameState {
+    redCardPos: number;
+    deck: Card[];
+    seats: {
+        byId: {
+            [x: number]: Seat;
+        };
+        allIds: number[];
     };
-    blackjackCount: number;
-    bets: PlayerBets[];
+    player: Player;
+    dealer: DealerState;
+    playingSeat: number;
 }
-
-export interface PlayerBets {
-    seatId: number;
-    bet: number;
-    status: SeatState | '';
-    win: number | null;
-}
-
-export interface AddBetAction {
-    id: number;
-    bet: number;
-}
-
-export interface SetSeatStateAction {
-    id: number;
-    status: SeatState;
-}
-
-export type WinStatus = SeatState.WIN | SeatState.LOSE | SeatState.PUSH;
