@@ -54,7 +54,7 @@ export const GameSlice = createSlice({
             const seat = state.seats.byId[action.payload];
             const card = seat.cards.pop()!;
             const score = seat.score / 2;
-            const id = +Date.now();
+            const id = state.seats.allIds.length;
             seat.score /= 2;
             seat.splittedID = id;
             state.seats.byId[id] = {
@@ -81,6 +81,11 @@ export const GameSlice = createSlice({
                 seat.status = SeatState.BUST;
             }
         },
+        hitCardDealer(state) {
+            const card = state.deck.pop()!;
+            state.dealer.cards.push(card);
+            state.dealer.score = calculateScore(state.dealer.cards);
+        },
         endGame(state) {
             state.player.lastWin = state.player.bets.reduce(
                 (acc: WinStatus, id) => {
@@ -96,8 +101,26 @@ export const GameSlice = createSlice({
             if (state.deck.length <= state.redCardPos) {
                 state.deck = Deck.shuffle();
                 state.redCardPos = Deck.getRedCardPos();
-            }            
-
+            }
+            state.dealer = initialDealer;
+            state.seats.allIds = state.seats.allIds.filter((id) => {
+                const seat = state.seats.byId[id];
+                const splitted = !!seat.originID;
+                if (splitted) {
+                    delete state.seats.byId[id];
+                } else {
+                    delete seat.splittedID;
+                    state.seats.byId[id] = {
+                        ...seat,
+                        score: 0,
+                        cards: [],
+                        amount: 0,
+                        status: '',
+                    };
+                }
+                return !splitted;
+            });
+            state.player.bets = state.player.bets.filter((id) => !state.seats.byId[id].originID);
             state.playingSeat = 0;
         },
         stand(state) {
@@ -106,5 +129,14 @@ export const GameSlice = createSlice({
     },
 });
 
-export const { addBets, clearBets, hitCard, restoreBets, splitPair, endGame, startGame, stand } =
-    GameSlice.actions;
+export const {
+    addBets,
+    clearBets,
+    hitCard,
+    hitCardDealer,
+    restoreBets,
+    splitPair,
+    endGame,
+    startGame,
+    stand,
+} = GameSlice.actions;

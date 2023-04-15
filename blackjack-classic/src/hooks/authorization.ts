@@ -23,9 +23,9 @@ export const useAuthorization = () => {
                 [Currencies.EUR]: 0,
                 [Currencies.USD]: 0,
                 [Currencies.GBP]: 0,
+                [currency]: 20,
             },
         };
-        newUser.balance[currency] = 20;
         saveUserToLocalStorage(newUser);
         dispatch(authorize(newUser));
     };
