@@ -10,14 +10,17 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
-    "jsonwebtoken": "^9.0.0",
+    "antd": "^5.4.2",
+    "jsrsasign": "^10.8.2",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-redux": "^8.0.5"
+    "react-redux": "^8.0.5",
+    "react-router": "^6.10.0",
+    "react-router-dom": "^6.10.0"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.1",
+    "@types/jsrsasign": "^10.5.8",
     "@types/lodash": "^4.14.191",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",

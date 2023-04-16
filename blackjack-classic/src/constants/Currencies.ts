@@ -3,3 +3,5 @@ export enum Currencies {
     USD = 'USD',
     GBP = 'GBP',
 }
+
+export const registrationBonus = 50;

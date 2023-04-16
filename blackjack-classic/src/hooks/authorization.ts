@@ -1,4 +1,4 @@
-import { Currencies } from '../constants/currencies';
+import { Currencies, registrationBonus } from '../constants/currencies';
 import { useAppDispatch, useUser } from '../store';
 import { authorize } from '../store/user';
 import { UserAuthData } from '../types/auth';
@@ -14,7 +14,7 @@ export const useAuthorization = () => {
     const dispatch = useAppDispatch();
     const user = useUser();
 
-    const register = (payload: UserAuthData, currency: Currencies) => {
+    const registerUser = (payload: UserAuthData, currency: Currencies) => {
         saveTokenToLocalStorage(payload.login, Jwt.signToken(payload));
         const newUser = {
             login: payload.login,
@@ -23,7 +23,7 @@ export const useAuthorization = () => {
                 [Currencies.EUR]: 0,
                 [Currencies.USD]: 0,
                 [Currencies.GBP]: 0,
-                [currency]: 20,
+                [currency]: registrationBonus,
             },
         };
         saveUserToLocalStorage(newUser);
@@ -60,5 +60,5 @@ export const useAuthorization = () => {
         );
     };
 
-    return { register, login, updatePassword };
+    return { registerUser, login, updatePassword };
 };
