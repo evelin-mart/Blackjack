@@ -58,7 +58,7 @@ export const SignInForm = () => {
                         validator(_, value) {
                             if (
                                 !value ||
-                                getFieldValue(UserFormFields.Login).match(/^[a-z0-9_-]{3,16}$/)
+                                getFieldValue(UserFormFields.Login).match(/^[a-zA-Z0-9_-]{3,16}$/)
                             ) {
                                 return Promise.resolve();
                             }
