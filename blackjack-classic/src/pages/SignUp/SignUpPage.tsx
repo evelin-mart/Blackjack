@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router';
 import { SignUpForm } from '../../components/forms/SignUp';
 import { Button } from 'antd';
-import { useNavigate } from 'react-router';
-import { ROUTES } from '../../components/router/RootRouter';
+import { ROUTES } from '../../constants';
 
 export const SignUpPage = () => {
     const navigate = useNavigate();

@@ -75,7 +75,11 @@ export const GameSlice = createSlice({
             seat.score = score;
             if (seat.cards.length === 2 && seat.score === 21) {
                 seat.status = SeatState.BJ;
-                seat.blackjackCount += 1;
+                if (seat.originID) {
+                    state.seats.byId[seat.originID].blackjackCount += 1;
+                } else {
+                    seat.blackjackCount += 1;
+                }
             }
             if (score > 21) {
                 seat.status = SeatState.BUST;

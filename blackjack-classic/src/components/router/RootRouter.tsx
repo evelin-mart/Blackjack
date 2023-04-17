@@ -1,20 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
-import { SignInPage } from '../../pages/SignIn';
-import { SignUpPage } from '../../pages/SignUp';
-import { HomePage } from '../../pages/Home';
-import { ProfilePage } from '../../pages/Profile';
-import { GamePage } from '../../pages/Game';
+import { SignInPage, GamePage, HomePage, LobbyPage, ProfilePage, SignUpPage } from '../../pages';
 import { PageLayout } from '../layout';
-
-export enum ROUTES {
-    HOME = '/',
-    SIGN_IN = '/sign-in',
-    SIGN_UP = '/sign-up',
-    PROFILE = '/profile',
-    GAME = '/blackjack-classic',
-    NOT_FOUND = '/not-found',
-}
+import { ROUTES } from '../../constants';
+import { ProtectedRoute } from './ProtectedRoute';
 
 export const RootRouter = () => {
     return (
@@ -25,16 +14,45 @@ export const RootRouter = () => {
                     element={
                         <>
                             <PageLayout>
-                            <Outlet />
+                                <Outlet />
                             </PageLayout>
                             {/* <Modal /> */}
                         </>
                     }
                 >
                     <Route index element={<HomePage />} />
-                    <Route path={ROUTES.SIGN_UP} element={<SignUpPage />} />
-                    <Route path={ROUTES.SIGN_IN} element={<SignInPage />} />
-                    <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+                    <Route
+                        path={ROUTES.PROFILE}
+                        element={
+                            <ProtectedRoute>
+                                <ProfilePage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path={ROUTES.LOBBY}
+                        element={
+                            <ProtectedRoute>
+                                <LobbyPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path={ROUTES.SIGN_UP}
+                        element={
+                            <ProtectedRoute>
+                                <SignUpPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path={ROUTES.SIGN_IN}
+                        element={
+                            <ProtectedRoute>
+                                <SignInPage />
+                            </ProtectedRoute>
+                        }
+                    />
                     {/* <Route path="*" element={<NotFoundPage />} /> */}
                 </Route>
                 <Route path={ROUTES.GAME} element={<GamePage />} />
