@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { SignUpForm } from '../../components/forms/SignUp';
-import { Button } from 'antd';
+import { Button, Card, Space, Typography } from 'antd';
 import { ROUTES } from '../../constants';
 
 export const SignUpPage = () => {
@@ -12,11 +12,16 @@ export const SignUpPage = () => {
     }, [navigate]);
 
     return (
-        <>
-            <SignUpForm />
-            <Button type="link" onClick={handleClick}>
-                I have an account
-            </Button>
-        </>
+        <Space align="center">
+            <Card>
+                <Space direction="vertical">
+                    <SignUpForm />
+                    <Typography>or</Typography>
+                    <Button type="link" onClick={handleClick}>
+                        Sign in
+                    </Button>
+                </Space>
+            </Card>
+        </Space>
     );
 };

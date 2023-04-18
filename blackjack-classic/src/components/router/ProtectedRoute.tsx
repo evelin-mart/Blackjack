@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router';
 import { useUser } from '../../store';
 import { ROUTES } from '../../constants';
 
-export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+export const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
     const { isAuth } = useUser();
     const location = useLocation();
 
@@ -15,5 +15,5 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         return <Navigate to={ROUTES.HOME} />;
     }
 
-    return <>{children}</>;
+    return children;
 };

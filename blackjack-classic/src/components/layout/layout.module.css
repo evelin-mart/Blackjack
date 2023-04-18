@@ -1,0 +1,5 @@
+.layout {
+  background: center / cover no-repeat url(../../assets/bg.jpg);
+  background-attachment: fixed;
+  padding: 20px 50px;
+}

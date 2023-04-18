@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layout } from 'antd';
 import { Navigation } from '../navigation';
+import styles from './layout.module.css';
 
 const { Header, Content, Footer } = Layout;
 
@@ -10,8 +11,8 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
             <Header>
                 <Navigation />
             </Header>
-            <Content>{children}</Content>
-            <Footer>Footer</Footer>
+            <Content className={styles.layout}>{children}</Content>
+            <Footer>© Evelin Martsina for Evolution 2023</Footer>
         </Layout>
     );
 };

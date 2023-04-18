@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router';
-import { Button } from 'antd';
+import { Button, Card, Space, Typography } from 'antd';
 import { SignInForm } from '../../components/forms/SignIn';
 import { ROUTES } from '../../constants';
 
@@ -12,11 +12,16 @@ export const SignInPage = () => {
     }, [navigate]);
 
     return (
-        <>
-            <SignInForm />
-            <Button type="link" onClick={handleClick}>
-                Create an account
-            </Button>
-        </>
+        <Space align="center">
+            <Card>
+                <Space direction="vertical">
+                    <SignInForm />
+                    <Typography>or</Typography>
+                    <Button type="link" onClick={handleClick}>
+                        Create an account
+                    </Button>
+                </Space>
+            </Card>
+        </Space>
     );
 };

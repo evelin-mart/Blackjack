@@ -11,17 +11,6 @@ interface SignUpForm {
     currency: Currencies;
 }
 
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-    },
-};
-
 const validateMessages = {
     required: '${label} is required!',
 };
@@ -46,7 +35,6 @@ export const SignUpForm = () => {
 
     return (
         <Form
-            {...formItemLayout}
             form={form}
             name="register"
             onFinish={onSubmit}
@@ -125,12 +113,17 @@ export const SignUpForm = () => {
             >
                 <Input.Password />
             </Form.Item>
-            <Form.Item name={UserFormFields.Currency} label="Currency" rules={[{ required: true }]}>
+            <Form.Item
+                name={UserFormFields.Currency}
+                label="Currency"
+                style={{ maxWidth: 170 }}
+                rules={[{ required: true }]}
+            >
                 <Select
                     options={[
-                        { value: Currencies.USD, label: Currencies.USD },
-                        { value: Currencies.EUR, label: Currencies.EUR },
-                        { value: Currencies.GBP, label: Currencies.GBP },
+                        { value: Currencies.USD, label: `$ ${Currencies.USD}` },
+                        { value: Currencies.EUR, label: `€ ${Currencies.EUR}` },
+                        { value: Currencies.GBP, label: `£ ${Currencies.GBP}` },
                     ]}
                 />
             </Form.Item>
