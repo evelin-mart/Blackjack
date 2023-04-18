@@ -3,3 +3,8 @@
   background-attachment: fixed;
   padding: 20px 50px;
 }
+
+.footer {
+    background-color: #001529;
+    color: rgba(255, 255, 255, 0.65);
+}
