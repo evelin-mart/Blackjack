@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { SignInPage, GamePage, HomePage, LobbyPage, ProfilePage, SignUpPage } from '../../pages';
 import { PageLayout } from '../layout';
 import { ROUTES } from '../../constants';
@@ -53,7 +53,7 @@ export const RootRouter = () => {
                             </ProtectedRoute>
                         }
                     />
-                    {/* <Route path="*" element={<NotFoundPage />} /> */}
+                    <Route path="*" element={<Navigate to={ROUTES.HOME} />} />
                 </Route>
                 <Route path={ROUTES.GAME} element={<GamePage />} />
             </Routes>

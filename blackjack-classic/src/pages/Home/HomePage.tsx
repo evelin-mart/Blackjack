@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import styles from './styles.module.css';
+import styles from './homepage.styles.module.css';
 import { Space, Typography } from 'antd';
 import { useNavigate } from 'react-router';
 import { ROUTES } from '../../constants';

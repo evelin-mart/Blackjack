@@ -12,16 +12,14 @@ export const SignUpPage = () => {
     }, [navigate]);
 
     return (
-        <Space align="center">
-            <Card>
-                <Space direction="vertical">
-                    <SignUpForm />
-                    <Typography>or</Typography>
-                    <Button type="link" onClick={handleClick}>
-                        Sign in
-                    </Button>
-                </Space>
-            </Card>
-        </Space>
+        <Card style={{ margin: 'auto', width: 'fit-content' }}>
+            <Space direction="vertical">
+                <SignUpForm />
+                <Typography>or</Typography>
+                <Button type="link" onClick={handleClick}>
+                    Sign in
+                </Button>
+            </Space>
+        </Card>
     );
 };

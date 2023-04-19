@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Typography } from 'antd';
 import { Navigation } from '../navigation';
-import styles from './layout.module.css';
+import styles from './layout.styles.module.css';
 
 const { Header, Content, Footer } = Layout;
 

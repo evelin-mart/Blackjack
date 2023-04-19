@@ -3,6 +3,8 @@ import { getUserFromLocalStorage } from '../../../utils/localStorage';
 import { useAuthorization } from '../../../hooks/authorization';
 import { Button, Select, Form, Input } from 'antd';
 import { UserFormFields } from '../types';
+import { LoginInput } from '../LoginInput';
+import { PasswordInput } from '../PasswordInput';
 
 interface SignUpForm {
     login: string;
@@ -35,63 +37,16 @@ export const SignUpForm = () => {
 
     return (
         <Form
+            size="large"
             form={form}
             name="register"
             onFinish={onSubmit}
             initialValues={{ [UserFormFields.Currency]: Currencies.EUR }}
             validateMessages={validateMessages}
-            style={{ maxWidth: 600 }}
             scrollToFirstError
         >
-            <Form.Item
-                name={UserFormFields.Login}
-                label="Login"
-                rules={[
-                    { required: true },
-                    ({ getFieldValue }) => ({
-                        validator(_, value) {
-                            if (
-                                !value ||
-                                getFieldValue(UserFormFields.Login).match(/^[a-zA-Z0-9_-]{3,16}$/)
-                            ) {
-                                return Promise.resolve();
-                            }
-                            return Promise.reject(
-                                new Error('Login must contain 3-16 characters except symbols!'),
-                            );
-                        },
-                    }),
-                ]}
-            >
-                <Input />
-            </Form.Item>
-            <Form.Item
-                name={UserFormFields.Password}
-                label="Password"
-                rules={[
-                    { required: true },
-                    ({ getFieldValue }) => ({
-                        validator(_, value) {
-                            if (
-                                !value ||
-                                getFieldValue(UserFormFields.Password).match(
-                                    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,12}$/,
-                                )
-                            ) {
-                                return Promise.resolve();
-                            }
-                            return Promise.reject(
-                                new Error(
-                                    'Password must contain digits, uppercase and lowercase letters!',
-                                ),
-                            );
-                        },
-                    }),
-                ]}
-                hasFeedback
-            >
-                <Input.Password />
-            </Form.Item>
+            <LoginInput />
+            <PasswordInput />
             <Form.Item
                 name={UserFormFields.ConfirmPassword}
                 label="Confirm Password"
@@ -104,9 +59,7 @@ export const SignUpForm = () => {
                             if (!value || getFieldValue(UserFormFields.Password) === value) {
                                 return Promise.resolve();
                             }
-                            return Promise.reject(
-                                new Error('The two passwords that you entered do not match!'),
-                            );
+                            return Promise.reject(new Error('Password mismatch!'));
                         },
                     }),
                 ]}

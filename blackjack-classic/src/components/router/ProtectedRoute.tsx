@@ -5,13 +5,13 @@ import { ROUTES } from '../../constants';
 
 export const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
     const { isAuth } = useUser();
-    const location = useLocation();
+    const { pathname } = useLocation();
 
     if (isAuth) {
-        if (location.pathname === ROUTES.SIGN_IN || location.pathname === ROUTES.SIGN_UP) {
+        if (pathname === ROUTES.SIGN_IN || pathname === ROUTES.SIGN_UP) {
             return <Navigate to={ROUTES.LOBBY} />;
         }
-    } else if (location.pathname === ROUTES.PROFILE || location.pathname === ROUTES.LOBBY) {
+    } else if (pathname === ROUTES.PROFILE || pathname === ROUTES.LOBBY) {
         return <Navigate to={ROUTES.HOME} />;
     }
 
