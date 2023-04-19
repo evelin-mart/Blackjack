@@ -5,3 +5,9 @@ export enum Currencies {
 }
 
 export const registrationBonus = 50;
+
+export enum Signs {
+    EUR = '€',
+    USD = '$',
+    GBP = '£',
+}
