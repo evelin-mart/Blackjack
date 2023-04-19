@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Currencies } from '../../constants/currencies';
+import { Currencies } from '../../constants';
 import { User, UserState } from './types';
 
 const initialState = {

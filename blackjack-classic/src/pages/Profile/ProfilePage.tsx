@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
-import { Button, Card } from 'antd';
+import { Button, Card, Space } from 'antd';
 import { useAppDispatch, useUser } from '../../store';
-import { Currencies, Signs } from '../../constants';
-import { Divider, Radio, Table } from 'antd';
+import { Currencies } from '../../constants';
+import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { changeCurrency } from '../../store/user';
+import { addBalance, changeCurrency } from '../../store/user';
 import { Key } from 'antd/es/table/interface';
+import { PlusOutlined } from '@ant-design/icons';
 
 interface DataType {
     key: React.Key;
@@ -48,14 +49,22 @@ export const ProfilePage = () => {
         ];
     }, [balance]);
 
-    const onCurrencyChange = useCallback((value: Key[]) => {
-        dispatch(changeCurrency(value[0] as Currencies));
-    }, []);
+    const onCurrencyChange = useCallback(
+        (value: Key[]) => {
+            dispatch(changeCurrency(value[0] as Currencies));
+        },
+        [dispatch],
+    );
+
+    const onTopUpBalance = useCallback(() => {
+        dispatch(addBalance(50));
+    }, [dispatch]);
 
     return (
         <Card size="small" style={{ margin: 'auto', width: 'fit-content' }}>
             <h2>Your balance:</h2>
             <Table
+                style={{ width: 300, margin: 'auto' }}
                 rowSelection={{
                     type: 'radio',
                     defaultSelectedRowKeys: [currency],
@@ -63,9 +72,14 @@ export const ProfilePage = () => {
                 }}
                 columns={columns}
                 dataSource={data}
+                pagination={false}
             />
-            {currency}
-            <Button type="link">Top Up</Button>
+            <Space>
+                <h4>Current: {currency}</h4>
+                <Button icon={<PlusOutlined />} onClick={onTopUpBalance}>
+                    Top Up
+                </Button>
+            </Space>
         </Card>
     );
 };
