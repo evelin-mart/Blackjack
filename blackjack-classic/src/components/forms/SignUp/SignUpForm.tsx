@@ -4,7 +4,8 @@ import { useAuthorization } from '../../../hooks';
 import { UserFormFields } from '../types';
 import { LoginInput } from '../LoginInput';
 import { PasswordInput } from '../PasswordInput';
-import { Button, Select, Form, Input } from 'antd';
+import { Button, Select, Form } from 'antd';
+import { ConfirmPasswordInput } from '../ConfirmPasswordInput';
 
 interface SignUpForm {
     login: string;
@@ -47,25 +48,7 @@ export const SignUpForm = () => {
         >
             <LoginInput />
             <PasswordInput />
-            <Form.Item
-                name={UserFormFields.ConfirmPassword}
-                label="Confirm Password"
-                dependencies={[UserFormFields.Password]}
-                hasFeedback
-                rules={[
-                    { required: true },
-                    ({ getFieldValue }) => ({
-                        validator(_, value) {
-                            if (!value || getFieldValue(UserFormFields.Password) === value) {
-                                return Promise.resolve();
-                            }
-                            return Promise.reject(new Error('Password mismatch!'));
-                        },
-                    }),
-                ]}
-            >
-                <Input.Password />
-            </Form.Item>
+            <ConfirmPasswordInput />
             <Form.Item
                 name={UserFormFields.Currency}
                 label="Currency"

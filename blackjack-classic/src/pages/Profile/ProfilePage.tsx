@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
 import { useAppDispatch, useUser, addBalance, changeCurrency } from '../../store';
+import { UpdatePasswordModal } from '../../components/modals';
 import { Currencies } from '../../constants';
-import { Button, Card, Space, Table } from 'antd';
+import { Button, Card, Divider, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Key } from 'antd/es/table/interface';
 import { PlusOutlined } from '@ant-design/icons';
@@ -78,6 +79,10 @@ export const ProfilePage = () => {
                     Top Up
                 </Button>
             </Space>
+            <Divider />
+            <UpdatePasswordModal />
+            <p>or</p>
+            <Button danger>Delete account</Button>
         </Card>
     );
 };
