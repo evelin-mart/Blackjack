@@ -1,8 +1,7 @@
 import { useAuthorization } from '../../../hooks';
-import { UserFormFields } from '../types';
 import { PasswordInput } from '../PasswordInput';
-import { Button, Form, Input } from 'antd';
 import { ConfirmPasswordInput } from '../ConfirmPasswordInput';
+import { Button, Form, Modal, Space } from 'antd';
 
 interface UpdatePasswordForm {
     password: string;
@@ -13,28 +12,45 @@ const validateMessages = {
     required: '${label} is required!',
 };
 
-export const UpdatePasswordForm = () => {
+interface Props {
+    handleModal: () => void;
+}
+
+export const UpdatePasswordForm = ({ handleModal }: Props) => {
     const { updatePassword } = useAuthorization();
     const [form] = Form.useForm<UpdatePasswordForm>();
 
     const onSubmit = ({ password }: UpdatePasswordForm) => {
         updatePassword(password);
+        form.resetFields();
+        handleModal();
+        Modal.success({
+            content: 'Password updated successfully!',
+        });
+    };
+
+    const onCancel = () => {
+        form.resetFields();
+        handleModal();
     };
 
     return (
         <Form
             size="large"
             form={form}
-            name="register"
+            name="UpdatePassword"
             onFinish={onSubmit}
             validateMessages={validateMessages}
             scrollToFirstError
         >
             <PasswordInput />
             <ConfirmPasswordInput />
-            <Button type="primary" htmlType="submit">
-                Update
-            </Button>
+            <Space style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button onClick={onCancel}>Cancel</Button>
+                <Button type="primary" htmlType="submit">
+                    Update
+                </Button>
+            </Space>
         </Form>
     );
 };

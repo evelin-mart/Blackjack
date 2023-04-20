@@ -1,10 +1,10 @@
-import { Currencies } from '../../../constants/currencies';
+import { Currencies, Signs, registrationBonus } from '../../../constants';
 import { getUserFromLocalStorage } from '../../../utils';
 import { useAuthorization } from '../../../hooks';
 import { UserFormFields } from '../types';
 import { LoginInput } from '../LoginInput';
 import { PasswordInput } from '../PasswordInput';
-import { Button, Select, Form } from 'antd';
+import { Button, Select, Form, Modal } from 'antd';
 import { ConfirmPasswordInput } from '../ConfirmPasswordInput';
 
 interface SignUpForm {
@@ -33,6 +33,10 @@ export const SignUpForm = () => {
             return;
         } else {
             registerUser({ login, password }, currency);
+            Modal.success({
+                title: 'You get a signup bonus!',
+                content: `${Signs[currency]}${registrationBonus}`,
+            });
         }
     };
 
@@ -40,7 +44,7 @@ export const SignUpForm = () => {
         <Form
             size="large"
             form={form}
-            name="register"
+            name="SignUp"
             onFinish={onSubmit}
             initialValues={{ [UserFormFields.Currency]: Currencies.EUR }}
             validateMessages={validateMessages}

@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
-import { useAppDispatch, useUser, addBalance, changeCurrency } from '../../store';
+import { useAppDispatch, useUser, addBalance, changeCurrency, logout } from '../../store';
 import { UpdatePasswordModal } from '../../components/modals';
 import { Currencies } from '../../constants';
-import { Button, Card, Divider, Space, Table } from 'antd';
+import { Button, Card, Divider, Modal, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Key } from 'antd/es/table/interface';
 import { PlusOutlined } from '@ant-design/icons';
+import { deleteUser } from '../../utils';
 
 interface DataType {
     key: React.Key;
@@ -25,7 +26,7 @@ const columns: ColumnsType<DataType> = [
 ];
 
 export const ProfilePage = () => {
-    const { balance, currency } = useUser();
+    const { balance, currency, login } = useUser();
     const dispatch = useAppDispatch();
 
     const data = useMemo(() => {
@@ -59,6 +60,17 @@ export const ProfilePage = () => {
         dispatch(addBalance(50));
     }, [dispatch]);
 
+    const onDeleteAccount = useCallback(() => {
+        Modal.warning({
+            title: 'Are you sure want to delete account?',
+            content: 'You will lose your money',
+            onOk: () => {
+                dispatch(logout());
+                deleteUser(login);
+            },
+        });
+    }, []);
+
     return (
         <Card size="small" style={{ margin: 'auto', width: 'fit-content' }}>
             <h2>Your balance:</h2>
@@ -82,7 +94,9 @@ export const ProfilePage = () => {
             <Divider />
             <UpdatePasswordModal />
             <p>or</p>
-            <Button danger>Delete account</Button>
+            <Button danger onClick={onDeleteAccount}>
+                Delete account
+            </Button>
         </Card>
     );
 };

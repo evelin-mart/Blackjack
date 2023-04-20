@@ -1,30 +1,21 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button, Modal } from 'antd';
 import { UpdatePasswordForm } from '../../forms';
 
 export const UpdatePasswordModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleOk = () => {
+    const handleClose = useCallback(() => {
         setIsModalOpen(false);
-    };
-
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
+    }, [setIsModalOpen]);
 
     return (
         <>
             <Button type="primary" onClick={() => setIsModalOpen(true)}>
                 Update Password
             </Button>
-            <Modal
-                title="Update Password"
-                open={isModalOpen}
-                onOk={handleOk}
-                onCancel={handleCancel}
-            >
-                <UpdatePasswordForm />
+            <Modal title="Update Password" footer={false} open={isModalOpen} onCancel={handleClose}>
+                <UpdatePasswordForm handleModal={handleClose} />
             </Modal>
         </>
     );

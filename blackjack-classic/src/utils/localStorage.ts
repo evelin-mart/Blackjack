@@ -32,3 +32,8 @@ export const getAuthorizedUser = () => {
 
     return getUserFromLocalStorage(login);
 };
+
+export const deleteUser = (login: string) => {
+    localStorage.removeItem(`${login}-data`);
+    localStorage.removeItem(`${login}-token`);
+};

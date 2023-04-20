@@ -34,7 +34,7 @@ export const SignInForm = () => {
         <Form
             size="large"
             form={form}
-            name="login"
+            name="SignIn"
             onFinish={onSubmit}
             validateMessages={validateMessages}
             style={{ maxWidth: 600 }}
