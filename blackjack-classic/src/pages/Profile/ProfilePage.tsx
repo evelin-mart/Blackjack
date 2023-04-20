@@ -5,7 +5,7 @@ import { Currencies } from '../../constants';
 import { Button, Card, Divider, Modal, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Key } from 'antd/es/table/interface';
-import { PlusOutlined } from '@ant-design/icons';
+import { ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons';
 import { deleteUser } from '../../utils';
 
 interface DataType {
@@ -61,10 +61,14 @@ export const ProfilePage = () => {
     }, [dispatch]);
 
     const onDeleteAccount = useCallback(() => {
-        Modal.warning({
+        Modal.confirm({
             title: 'Are you sure want to delete account?',
+            icon: <ExclamationCircleFilled />,
             content: 'You will lose your money',
-            onOk: () => {
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk() {
                 dispatch(logout());
                 deleteUser(login);
             },
