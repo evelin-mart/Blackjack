@@ -1,14 +1,13 @@
-import { Currencies, registrationBonus } from '../constants/currencies';
-import { useAppDispatch, useUser } from '../store';
-import { authorize } from '../store/user';
-import { UserAuthData } from '../types/auth';
-import { Jwt } from '../utils/auth';
+import { Currencies, registrationBonus } from '../constants';
+import { useAppDispatch, useUser, authorize } from '../store';
+import { UserAuthData } from '../types';
 import {
+    Jwt,
     getTokenFromLocalStorage,
     getUserFromLocalStorage,
     saveTokenToLocalStorage,
     saveUserToLocalStorage,
-} from '../utils/localStorage';
+} from '../utils';
 
 export const useAuthorization = () => {
     const dispatch = useAppDispatch();

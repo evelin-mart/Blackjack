@@ -1,12 +1,12 @@
 import './App.css';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import { RootRouter } from './components/router';
+import { RouterWithListener } from './components/router';
 
 function App() {
     return (
         <Provider store={store}>
-            <RootRouter />
+            <RouterWithListener />
         </Provider>
     );
 }

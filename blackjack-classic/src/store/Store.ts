@@ -1,15 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
-import { GameSlice } from './game';
-import { UserSlice } from './user';
-import { UserState } from './user/types';
-import { GameState } from './game/types';
+import { GameSlice, GameState } from './game';
+import { UserSlice, UserState } from './user';
+import { saveUserDataMiddleware } from './middleware';
 
 export const store = configureStore({
     reducer: {
         [UserSlice.name]: UserSlice.reducer,
         [GameSlice.name]: GameSlice.reducer,
     },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(saveUserDataMiddleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

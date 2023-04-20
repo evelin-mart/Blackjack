@@ -1,4 +1,4 @@
-import { User } from '../store/user/types';
+import { User } from '../store';
 
 export const saveTokenToLocalStorage = (login: string, token: string) => {
     localStorage.setItem(`${login}-token`, token);
@@ -14,4 +14,21 @@ export const saveUserToLocalStorage = (user: User) => {
 
 export const getUserFromLocalStorage = (login: string) => {
     return localStorage.getItem(`${login}-data`);
+};
+
+export const saveAuthorizedUser = (login: string) => {
+    localStorage.setItem(`authorized`, login);
+};
+
+export const deleteAuthorizedUser = () => {
+    localStorage.removeItem(`authorized`);
+};
+
+export const getAuthorizedUser = () => {
+    const login = localStorage.getItem(`authorized`);
+    if (!login) {
+        return null;
+    }
+
+    return getUserFromLocalStorage(login);
 };

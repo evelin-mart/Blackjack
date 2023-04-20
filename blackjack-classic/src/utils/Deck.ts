@@ -1,7 +1,6 @@
 import { shuffle } from 'lodash';
-import { Rank, Suit } from '../constants/suits';
-import { decksInGameCount } from '../constants/deck';
-import { Card } from '../types/deck';
+import { Rank, Suit, decksInGameCount } from '../constants';
+import { Card } from '../types';
 
 const getRandomNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min)) + min;

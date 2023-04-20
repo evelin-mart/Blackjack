@@ -1,10 +1,10 @@
 import { Currencies } from '../../../constants/currencies';
-import { getUserFromLocalStorage } from '../../../utils/localStorage';
-import { useAuthorization } from '../../../hooks/authorization';
-import { Button, Select, Form, Input } from 'antd';
+import { getUserFromLocalStorage } from '../../../utils';
+import { useAuthorization } from '../../../hooks';
 import { UserFormFields } from '../types';
 import { LoginInput } from '../LoginInput';
 import { PasswordInput } from '../PasswordInput';
+import { Button, Select, Form, Input } from 'antd';
 
 interface SignUpForm {
     login: string;

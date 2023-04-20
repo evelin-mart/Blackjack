@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { Button, Card, Space, Typography } from 'antd';
-import { SignInForm } from '../../components/forms/SignIn';
+import { SignInForm } from '../../components/forms';
 import { ROUTES } from '../../constants';
 
 export const SignInPage = () => {

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router';
-import { SignUpForm } from '../../components/forms/SignUp';
+import { SignUpForm } from '../../components/forms';
 import { Button, Card, Space, Typography } from 'antd';
 import { ROUTES } from '../../constants';
 

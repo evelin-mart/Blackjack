@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router';
 import styles from './homepage.styles.module.css';
 import { Space, Typography } from 'antd';
-import { useNavigate } from 'react-router';
 import { ROUTES } from '../../constants';
 import { useUser } from '../../store';
 

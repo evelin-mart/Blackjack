@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useGame } from '../store';
-import { Cost } from '../constants/suits';
-import { endGame, hitCardDealer } from '../store/game';
+import { useAppDispatch, useGame, endGame, hitCardDealer } from '../store';
+import { Cost } from '../constants';
 
 export const useDealer = () => {
     const dispatch = useAppDispatch();

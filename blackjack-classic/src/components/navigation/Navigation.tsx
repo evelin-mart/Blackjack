@@ -1,10 +1,9 @@
 import React, { useMemo } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { useAppDispatch, useUser, logout } from '../../store';
+import { ROUTES } from '../../constants';
 import { Menu, MenuProps } from 'antd';
 import { SettingOutlined, UserOutlined, LogoutOutlined, LoginOutlined } from '@ant-design/icons';
-import { useAppDispatch, useUser } from '../../store';
-import { NavLink, useLocation } from 'react-router-dom';
-import { ROUTES } from '../../constants';
-import { logout } from '../../store/user';
 
 const unAuthItems: MenuProps['items'] = [
     {

@@ -1,1 +1,1 @@
-export { RootRouter } from './RootRouter';
+export { RouterWithListener } from './RootRouter';

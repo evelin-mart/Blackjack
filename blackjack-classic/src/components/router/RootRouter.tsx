@@ -4,20 +4,18 @@ import { SignInPage, GamePage, HomePage, LobbyPage, ProfilePage, SignUpPage } fr
 import { PageLayout } from '../layout';
 import { ROUTES } from '../../constants';
 import { ProtectedRoute } from './ProtectedRoute';
+import { WithEventListener } from '../../hocs';
 
-export const RootRouter = () => {
+const RootRouter = () => {
     return (
         <BrowserRouter>
             <Routes>
                 <Route
                     path={ROUTES.HOME}
                     element={
-                        <>
-                            <PageLayout>
-                                <Outlet />
-                            </PageLayout>
-                            {/* <Modal /> */}
-                        </>
+                        <PageLayout>
+                            <Outlet />
+                        </PageLayout>
                     }
                 >
                     <Route index element={<HomePage />} />
@@ -60,3 +58,5 @@ export const RootRouter = () => {
         </BrowserRouter>
     );
 };
+
+export const RouterWithListener = WithEventListener(RootRouter);

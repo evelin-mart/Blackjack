@@ -1,5 +1,5 @@
 import { KJUR, b64utoutf8 } from 'jsrsasign';
-import { UserAuthData } from '../types/auth';
+import { UserAuthData } from '../types';
 
 export class Jwt {
     private static readonly algorithm = 'HS256';

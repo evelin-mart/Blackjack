@@ -1,10 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
-import { Button, Card, Space } from 'antd';
-import { useAppDispatch, useUser } from '../../store';
+import { useAppDispatch, useUser, addBalance, changeCurrency } from '../../store';
 import { Currencies } from '../../constants';
-import { Table } from 'antd';
+import { Button, Card, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { addBalance, changeCurrency } from '../../store/user';
 import { Key } from 'antd/es/table/interface';
 import { PlusOutlined } from '@ant-design/icons';
 
