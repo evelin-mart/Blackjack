@@ -1,0 +1,29 @@
+.wrapper {
+    position: relative;
+    width: 47px;
+    height: 64px;
+    border: 1px solid var(--soft-white);
+    border-radius: 3px;
+}
+
+.card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 47px;
+    height: 64px;
+}
+
+.status {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.score {
+    position: absolute;
+    top: 57px;
+    left: 10px;
+    width: 27px;
+    text-align: center;
+}

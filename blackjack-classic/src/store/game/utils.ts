@@ -1,6 +1,6 @@
 import { Cost, Rank } from '../../constants/suits';
 import { Card } from '../../types/deck';
-import { DealerState, Seat, SeatState, WinStatus } from './types';
+import { DealerState, SeatStatus, SeatState, WinStatus } from './types';
 
 export const calculateScore = (cards: Card[]) => {
     let sum = cards.reduce((sum, card) => sum + Cost[card.rank], 0);
@@ -15,7 +15,7 @@ export const calculateScore = (cards: Card[]) => {
     return sum;
 };
 
-export const calculateWin = (dealerSeat: DealerState, playerSeat: Seat): WinStatus => {
+export const calculateWin = (dealerSeat: DealerState, playerSeat: SeatState): WinStatus => {
     const dealerScore = dealerSeat.score;
     const dealerBlackjack = dealerScore === 21 && dealerSeat.cards.length === 2;
     const playerScore = playerSeat.score;
@@ -25,48 +25,48 @@ export const calculateWin = (dealerSeat: DealerState, playerSeat: Seat): WinStat
     if (playerScore > 21) {
         return {
             payout: 0,
-            status: SeatState.BUST,
+            status: SeatStatus.BUST,
         };
     }
     if (dealerScore > 21) {
         if (playerBlackjack) {
             return {
                 payout: bet * 1.5 * 2,
-                status: SeatState.BJ,
+                status: SeatStatus.BJ,
             };
         }
         return {
             payout: bet * 2,
-            status: SeatState.WIN,
+            status: SeatStatus.WIN,
         };
     }
     if (playerScore < dealerScore) {
         return {
             payout: 0,
-            status: SeatState.LOSE,
+            status: SeatStatus.LOSE,
         };
     }
     if (playerScore === dealerScore) {
         if (dealerBlackjack && !playerBlackjack) {
             return {
                 payout: 0,
-                status: SeatState.LOSE,
+                status: SeatStatus.LOSE,
             };
         }
         return {
             payout: bet,
-            status: SeatState.PUSH,
+            status: SeatStatus.PUSH,
         };
     } else {
         if (playerBlackjack) {
             return {
                 payout: bet * 1.5 * 2,
-                status: SeatState.BJ,
+                status: SeatStatus.BJ,
             };
         }
         return {
             payout: bet * 2,
-            status: SeatState.WIN,
+            status: SeatStatus.WIN,
         };
     }
 };
@@ -75,11 +75,11 @@ export const calculateWinStatus = (acc: WinStatus, current: WinStatus): WinStatu
     const payout = acc.payout + current.payout;
     let status = acc.status;
 
-    if (current.status !== SeatState.LOSE) {
-        if (current.status !== SeatState.PUSH) {
-            status = SeatState.WIN;
-        } else if (status !== SeatState.WIN) {
-            status = SeatState.PUSH;
+    if (current.status !== SeatStatus.LOSE) {
+        if (current.status !== SeatStatus.PUSH) {
+            status = SeatStatus.WIN;
+        } else if (status !== SeatStatus.WIN) {
+            status = SeatStatus.PUSH;
         }
     }
 

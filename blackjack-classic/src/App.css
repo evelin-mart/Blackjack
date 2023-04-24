@@ -1,6 +1,7 @@
 :root{
     --soft-white: rgba(255, 255, 255, 0.85);
     --gold: rgba(235, 184, 55, 1);
+    --dark-blue: #001529;
 }
 
 #root {

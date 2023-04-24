@@ -1,5 +1,24 @@
 .header {
+    background-color: var(--dark-blue);
+}
+
+.title {
     margin: 0;
     text-align: left;
     color: var(--soft-white);
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    color: var(--soft-white);
+    background-color: var(--dark-blue);
+    text-transform: uppercase;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #004b10;
 }

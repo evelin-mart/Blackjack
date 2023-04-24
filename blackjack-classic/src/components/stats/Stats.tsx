@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useGame, useUser } from '../../store';
 import { DollarOutlined, EuroOutlined, PoundOutlined } from '@ant-design/icons';
 import { ROUTES, Signs } from '../../constants';
-import { Button } from 'antd';
+import { Button, Space, Tag } from 'antd';
 import { useNavigate } from 'react-router';
 
 const Items = {
@@ -23,13 +23,18 @@ export const Stats = () => {
     }, [navigate]);
 
     return (
-        <div>
-            <span>{Items[currency]}</span>
-            <span>
-                balance {Signs[currency]}{balance[currency]}
-            </span>
-            <span>total bet {totalBet}</span>
-            <Button type="link" onClick={handleClick}>Lobby</Button>
-        </div>
+        <>
+            <Space>
+                <Tag color="#004b10">{Items[currency]}</Tag>
+                <Tag color="#004b10">
+                    balance {Signs[currency]}
+                    {balance[currency]}
+                </Tag>
+                <Tag color="#004b10">total bet {totalBet}</Tag>
+            </Space>
+            <Button type="link" onClick={handleClick}>
+                Lobby
+            </Button>
+        </>
     );
 };

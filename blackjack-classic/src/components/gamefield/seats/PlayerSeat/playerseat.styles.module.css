@@ -1,0 +1,36 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.bet {
+    width: 30px;
+    height: 30px;
+    margin-top: 10px;
+    border-radius: 50%;
+    border: 1px solid var(--soft-white);
+    text-align: center;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.count {
+    width: 13px;
+    height: 13px;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 13px;
+    background-color: var(--gold);
+    border-radius: 50%;
+}
+
+.login {
+    color: var(--gold);
+    opacity: 0.96;
+}

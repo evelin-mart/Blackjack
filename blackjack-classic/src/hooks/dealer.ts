@@ -6,7 +6,7 @@ export const useDealer = () => {
     const dispatch = useAppDispatch();
     const { seats, playingSeat, dealer } = useGame();
     const { cards, score } = dealer;
-    const [shownScore, setShownScore] = useState(Cost[cards[0].rank]);
+    const [shownScore, setShownScore] = useState(() => (cards.length ? Cost[cards[0].rank] : 0));
 
     useEffect(() => {
         if (playingSeat === seats.allIds.length) {
@@ -19,5 +19,5 @@ export const useDealer = () => {
         }
     }, [playingSeat, cards, score]);
 
-    return { shownScore };
+    return { cards, shownScore };
 };

@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Deck } from '../../utils/deck';
-import { GameState, Player, Seat, SeatState, WinStatus } from './types';
+import { GameState, GameStatus, Player, SeatStatus, SeatState, WinStatus } from './types';
 import { calculateScore, calculateWin, calculateWinStatus } from './utils';
 
 const initialPlayer: Player = {
@@ -8,7 +8,7 @@ const initialPlayer: Player = {
     lastBet: 0,
 };
 
-const initialSeat: Seat = {
+const initialSeat: SeatState = {
     id: 0,
     score: 0,
     cards: [],
@@ -25,6 +25,7 @@ const initialDealer = {
 const initialState: GameState = {
     redCardPos: Deck.getRedCardPos(),
     deck: Deck.shuffle(),
+    status: GameStatus.OVER,
     seats: {
         byId: {
             0: initialSeat,
@@ -74,7 +75,7 @@ export const GameSlice = createSlice({
             const score = calculateScore(seat.cards);
             seat.score = score;
             if (seat.cards.length === 2 && seat.score === 21) {
-                seat.status = SeatState.BJ;
+                seat.status = SeatStatus.BJ;
                 if (seat.originID) {
                     state.seats.byId[seat.originID].blackjackCount += 1;
                 } else {
@@ -82,7 +83,7 @@ export const GameSlice = createSlice({
                 }
             }
             if (score > 21) {
-                seat.status = SeatState.BUST;
+                seat.status = SeatStatus.BUST;
             }
         },
         hitCardDealer(state) {
@@ -98,10 +99,12 @@ export const GameSlice = createSlice({
                     seat.status = win.status;
                     return calculateWinStatus(acc, win);
                 },
-                { status: SeatState.LOSE, payout: 0 },
+                { status: SeatStatus.LOSE, payout: 0 },
             );
+            state.status = GameStatus.OVER;
         },
         startGame(state) {
+            state.status = GameStatus.PLAY;
             if (state.deck.length <= state.redCardPos) {
                 state.deck = Deck.shuffle();
                 state.redCardPos = Deck.getRedCardPos();
