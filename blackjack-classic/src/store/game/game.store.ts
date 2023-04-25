@@ -42,8 +42,7 @@ export const GameSlice = createSlice({
     initialState,
     reducers: {
         addBets(state, action: PayloadAction<number>) {
-            state.player.lastBet = action.payload;
-            state.player.bets.map((id) => (state.seats.byId[id].amount = action.payload));
+            state.player.bets.map((id) => (state.seats.byId[id].amount += action.payload));
         },
         restoreBets(state) {
             state.player.bets.map((id) => (state.seats.byId[id].amount = state.player.lastBet));
@@ -105,6 +104,7 @@ export const GameSlice = createSlice({
         },
         startGame(state) {
             state.status = GameStatus.PLAY;
+            state.player.lastBet = state.seats.byId[0].amount;
             if (state.deck.length <= state.redCardPos) {
                 state.deck = Deck.shuffle();
                 state.redCardPos = Deck.getRedCardPos();

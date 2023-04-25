@@ -1,0 +1,29 @@
+.chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 13px;
+    color: white;
+}
+
+.yellow {
+    background: center / contain url('../../assets/chips/yellow.png') no-repeat;
+}
+
+.red {
+    background: center / contain url('../../assets/chips/red.png') no-repeat;
+}
+
+.blue {
+    background: center / contain url('../../assets/chips/blue.png') no-repeat;
+}
+
+.black {
+    background: center / contain url('../../assets/chips/black.png') no-repeat;
+}
+
+.green {
+    background: center / contain url('../../assets/chips/green.png') no-repeat;
+}

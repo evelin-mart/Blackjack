@@ -30,7 +30,9 @@ export const Stats = () => {
                     balance {Signs[currency]}
                     {balance[currency]}
                 </Tag>
-                <Tag color="#004b10">total bet {totalBet}</Tag>
+                <Tag color="#004b10">
+                    total bet {Signs[currency]}{totalBet}
+                </Tag>
             </Space>
             <Button type="link" onClick={handleClick}>
                 Lobby
