@@ -1,7 +1,6 @@
 import React from 'react';
 import { SeatState } from '../../../../store';
 import styles from '../seats.styles.module.css';
-import king from '../../../../assets/Spade/King.png';
 import { Tag } from 'antd';
 
 type Props = {
@@ -22,14 +21,14 @@ export const Seat = ({ seat }: Props) => {
         <div className={styles.wrapper}>
             {cards.map((card, i) => (
                 <img
-                    src={king}
+                    src={`./assets/${card.suit}/${card.rank}.png`}
                     key={i}
                     className={styles.card}
-                    style={{ transform: `translate(${i * 20}px, ${i * 20}px)` }}
+                    style={{ transform: `translate(${i * 16}px, -${i * 16}px)` }}
                 />
             ))}
             {score > 0 && (
-                <Tag className={styles.score} color="cyan">
+                <Tag className={styles.score} color="black">
                     {score}
                 </Tag>
             )}

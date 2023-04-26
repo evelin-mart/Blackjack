@@ -1,7 +1,7 @@
 .wrapper {
     position: relative;
-    width: 47px;
-    height: 64px;
+    width: 56.4px;
+    height: 76.8px;
     border: 1px solid var(--soft-white);
     border-radius: 3px;
 }
@@ -10,8 +10,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 47px;
-    height: 64px;
+    width: 56.4px;
+    height: 76.8px;
 }
 
 .status {
@@ -22,8 +22,8 @@
 
 .score {
     position: absolute;
-    top: 57px;
-    left: 10px;
+    top: 70px;
+    left: 14px;
     width: 27px;
     text-align: center;
 }

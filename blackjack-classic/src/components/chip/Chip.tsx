@@ -21,7 +21,7 @@ export const Chip = ({ value, isActive = true }: Props) => {
                 dispatch(addBets(value));
             }
         }
-    }, [dispatch, value]);
+    }, [dispatch, value, user, isActive]);
 
     return (
         <div className={`${styles.chip} ${styles[color]}`} onClick={handleClick}>

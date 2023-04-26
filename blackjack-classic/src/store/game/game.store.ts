@@ -104,6 +104,8 @@ export const GameSlice = createSlice({
         },
         startGame(state) {
             state.status = GameStatus.PLAY;
+        },
+        resetState(state) {
             state.player.lastBet = state.seats.byId[0].amount;
             if (state.deck.length <= state.redCardPos) {
                 state.deck = Deck.shuffle();
@@ -146,4 +148,5 @@ export const {
     endGame,
     startGame,
     stand,
+    resetState,
 } = GameSlice.actions;

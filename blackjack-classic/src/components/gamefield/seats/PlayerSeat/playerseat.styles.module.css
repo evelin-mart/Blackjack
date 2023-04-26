@@ -6,12 +6,16 @@
 }
 
 .bet {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 35px;
     height: 35px;
     margin-top: 10px;
     border-radius: 50%;
     border: 1px solid var(--soft-white);
     text-align: center;
+    cursor: default;
 }
 
 .user {

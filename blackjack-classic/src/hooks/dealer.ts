@@ -6,18 +6,22 @@ export const useDealer = () => {
     const dispatch = useAppDispatch();
     const { seats, playingSeat, dealer } = useGame();
     const { cards, score } = dealer;
-    const [shownScore, setShownScore] = useState(() => (cards.length ? Cost[cards[0].rank] : 0));
+    const [shownScore, setShownScore] = useState(0);
+
+    const isDealerTurn = playingSeat === seats.allIds.length;
 
     useEffect(() => {
-        if (playingSeat === seats.allIds.length) {
+        if (isDealerTurn) {
             setShownScore(score);
             if (score < 17) {
                 dispatch(hitCardDealer());
             } else {
                 dispatch(endGame());
             }
+        } else if (cards.length && shownScore === 0) {
+            setShownScore(Cost[cards[0].rank]);
         }
-    }, [playingSeat, cards, score]);
+    }, [isDealerTurn, cards, score]);
 
-    return { cards, shownScore };
+    return { cards, shownScore, isDealerTurn };
 };
