@@ -78,7 +78,7 @@ export const calculateWinStatus = (acc: WinStatus, current: WinStatus): WinStatu
     if (current.status !== SeatStatus.LOSE) {
         if (current.status !== SeatStatus.PUSH) {
             status = SeatStatus.WIN;
-        } else if (status !== SeatStatus.WIN) {
+        } else if (acc.status !== SeatStatus.WIN) {
             status = SeatStatus.PUSH;
         }
     }

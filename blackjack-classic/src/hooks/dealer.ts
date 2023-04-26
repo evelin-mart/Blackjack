@@ -18,8 +18,12 @@ export const useDealer = () => {
             } else {
                 dispatch(endGame());
             }
-        } else if (cards.length && shownScore === 0) {
-            setShownScore(Cost[cards[0].rank]);
+        } else if (cards.length) {
+            if (shownScore === 0) {
+                setShownScore(Cost[cards[0].rank]);
+            }
+        } else {
+            setShownScore(0);
         }
     }, [isDealerTurn, cards, score]);
 

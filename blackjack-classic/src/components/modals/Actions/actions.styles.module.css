@@ -15,25 +15,8 @@
     align-items: center;
 }
 
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    color: white;
-}
-
 .content {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-}
-
-.title {
-    display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 8px;
@@ -45,8 +28,29 @@
     align-items: center;
     width: 40px;
     height: 40px;
-    border: 1px solid var(--soft-white);
+    color: white;
     border-radius: 50%;
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.45);
+}
+
+.red {
+    background-color: rgba(245, 56, 56, 0.9);
+}
+
+.green {
+    background-color: rgba(6, 126, 6, 0.9);
+}
+
+.orange {
+    background-color: rgba(255, 166, 0, 0.9);
+}
+
+.blue {
+    background-color: rgba(0, 208, 255, 0.9);
+}
+
+.inactive {
+    opacity: 0.5;
+    cursor: default;
+    background-color: rgba(0, 0, 0, 0.5);
 }

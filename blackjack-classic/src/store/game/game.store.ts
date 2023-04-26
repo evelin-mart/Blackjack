@@ -44,6 +44,9 @@ export const GameSlice = createSlice({
         addBets(state, action: PayloadAction<number>) {
             state.player.bets.map((id) => (state.seats.byId[id].amount += action.payload));
         },
+        doubleBet(state) {
+            state.seats.byId[state.playingSeat].amount *= 2;
+        },
         restoreBets(state) {
             state.player.bets.map((id) => (state.seats.byId[id].amount = state.player.lastBet));
         },
@@ -68,6 +71,9 @@ export const GameSlice = createSlice({
             state.player.bets.push(id);
         },
         hitCard(state, action: PayloadAction<number>) {
+            if (state.status !== GameStatus.PLAY) {
+                state.status = GameStatus.PLAY;
+            }
             const card = state.deck.pop()!;
             const seat = state.seats.byId[action.payload];
             seat.cards.push(card);
@@ -100,18 +106,18 @@ export const GameSlice = createSlice({
                 },
                 { status: SeatStatus.LOSE, payout: 0 },
             );
-            state.status = GameStatus.OVER;
-        },
-        startGame(state) {
-            state.status = GameStatus.PLAY;
         },
         resetState(state) {
+            state.status = GameStatus.OVER;
             state.player.lastBet = state.seats.byId[0].amount;
             if (state.deck.length <= state.redCardPos) {
                 state.deck = Deck.shuffle();
                 state.redCardPos = Deck.getRedCardPos();
             }
-            state.dealer = initialDealer;
+            state.dealer = {
+                score: 0,
+                cards: [],
+            };
             state.seats.allIds = state.seats.allIds.filter((id) => {
                 const seat = state.seats.byId[id];
                 const splitted = !!seat.originID;
@@ -146,7 +152,7 @@ export const {
     restoreBets,
     splitPair,
     endGame,
-    startGame,
     stand,
     resetState,
+    doubleBet,
 } = GameSlice.actions;

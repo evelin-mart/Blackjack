@@ -20,16 +20,19 @@ import { Tooltip } from 'antd';
 import { useNavigate } from 'react-router';
 import { ROUTES } from '../../../constants';
 
-export const PlaceBetsModal = () => {
+type Props = {
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export const PlaceBetsModal = ({ open, setOpen }: Props) => {
     const game = useGame();
     const user = useUser();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const [isModalOpen, setIsModalOpen] = useState(true);
-
     const totalBet = game.player.bets.reduce((acc, bet) => acc + game.seats.byId[bet].amount, 0);
-    const style = classNames(styles.mask, { [styles.active]: isModalOpen });
+    const style = classNames(styles.mask, { [styles.active]: open });
 
     const handleUndoBets = useCallback(() => {
         dispatch(addBalance(totalBet));
@@ -46,12 +49,12 @@ export const PlaceBetsModal = () => {
 
     const handleClose = useCallback(() => {
         if (game.seats.allIds.some((id) => game.seats.byId[id].amount < 5)) {
-            setIsModalOpen(false);
+            setOpen(false);
             dispatch(addBalance(totalBet));
             dispatch(resetState());
             navigate(ROUTES.LOBBY);
         } else {
-            setIsModalOpen(false);
+            setOpen(false);
             for (let i = 0; i < 2; i++) {
                 game.seats.allIds.forEach((id) => {
                     dispatch(hitCard(id));
@@ -64,7 +67,6 @@ export const PlaceBetsModal = () => {
     return (
         <div className={style}>
             <div className={styles.wrapper}>
-                {/* <div className={styles.timer}>{}</div> */}
                 <div className={styles.content}>
                     <div className={styles.button} onClick={handleUndoBets}>
                         <Tooltip title="UNDO">

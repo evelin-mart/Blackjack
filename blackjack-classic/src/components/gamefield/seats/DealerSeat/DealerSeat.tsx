@@ -29,11 +29,11 @@ export const DealerSeat = () => {
                     />
                 );
             })}
-            {
+            {shownScore > 0 && (
                 <Tag className={styles.score} color="black">
                     {shownScore}
                 </Tag>
-            }
+            )}
         </div>
     );
 };

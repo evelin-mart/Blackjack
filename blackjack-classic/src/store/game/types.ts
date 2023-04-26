@@ -5,7 +5,7 @@ export enum SeatStatus {
     LOSE = 'Lose',
     PUSH = 'Push',
     BUST = 'Bust',
-    BJ = 'Blackjack',
+    BJ = 'BJ',
 }
 
 export interface SeatState {
@@ -37,7 +37,7 @@ export interface DealerState {
 
 export enum GameStatus {
     PLAY,
-    OVER
+    OVER,
 }
 
 export interface GameState {

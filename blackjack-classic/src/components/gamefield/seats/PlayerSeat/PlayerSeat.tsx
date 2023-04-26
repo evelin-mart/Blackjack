@@ -15,23 +15,20 @@ export const PlayerSeat = ({ seat }: Props) => {
     const game = useGame();
 
     return (
-        <>
-            <ActionsModal />
-            <div className={styles.wrapper}>
-                <Space size={20}>
-                    <Seat seat={seat} />
-                    {seat.splittedID && <Seat seat={game.seats.byId[seat.splittedID]} />}
-                </Space>
-                <div className={styles.bet}>
-                    {seat.amount > 0 && <Chip value={seat.amount} isActive={false} />}
-                </div>
-                <div className={styles.user}>
-                    {seat.blackjackCount > 0 && (
-                        <div className={styles.count}>{seat.blackjackCount}</div>
-                    )}
-                    <div className={styles.login}>{user.login}</div>
-                </div>
+        <div className={styles.wrapper}>
+            <Space size={20}>
+                <Seat seat={seat} />
+                {seat.splittedID && <Seat seat={game.seats.byId[seat.splittedID]} />}
+            </Space>
+            <div className={styles.bet}>
+                {seat.amount > 0 && <Chip value={seat.amount} isActive={false} />}
             </div>
-        </>
+            <div className={styles.user}>
+                {seat.blackjackCount > 0 && (
+                    <div className={styles.count}>{seat.blackjackCount}</div>
+                )}
+                <div className={styles.login}>{user.login}</div>
+            </div>
+        </div>
     );
 };
