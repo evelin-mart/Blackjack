@@ -15,7 +15,7 @@ export const PlayerSeat = ({ seat }: Props) => {
 
     return (
         <div className={styles.wrapper}>
-            <Space size={20}>
+            <Space size={25}>
                 <Seat seat={seat} />
                 {seat.splittedID && <Seat seat={game.seats.byId[seat.splittedID]} />}
             </Space>

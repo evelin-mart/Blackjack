@@ -3,7 +3,7 @@
     width: 56.4px;
     height: 76.8px;
     border: 1px solid var(--soft-white);
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
 .card {
@@ -16,14 +16,38 @@
 
 .status {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 35%;
+    left: 90%;
+    z-index: 500;
+}
+
+.icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border-width: 3px;
+    border-style: solid;
+}
+
+.success {
+    border-color: var(--gold);
+    background: center / 27.5px url('../../../assets/success.svg') no-repeat, rgba(0, 0, 0, 0.8);
+}
+
+.loose {
+    border-color: red;
+    background: center / 27.5px url('../../../assets/fail.svg') no-repeat, rgba(0, 0, 0, 0.8);
+}
+
+.push {
+    border-color: var(--soft-white);
+    background: center / 27.5px url('../../../assets/push.svg') no-repeat, rgba(0, 0, 0, 0.8);
 }
 
 .score {
     position: absolute;
     top: 70px;
-    left: 14px;
-    width: 27px;
+    left: calc(50% - 14px);
+    width: 28px;
     text-align: center;
 }

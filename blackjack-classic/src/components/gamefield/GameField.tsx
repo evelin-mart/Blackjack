@@ -14,7 +14,7 @@ export const GameField = () => {
     const [openGameover, setOpenGameover] = useState(false);
 
     useEffect(() => {
-        let timeout: NodeJS.Timeout;
+        let timeout: number;
         if (player.lastWin && status === GameStatus.PLAY) {
             setOpenGameover(true);
 
@@ -24,18 +24,13 @@ export const GameField = () => {
             timeout = setTimeout(() => {
                 setOpenGameover(false);
                 dispatch(resetState());
+                setOpenBets(true);
             }, 3500);
         }
         return () => {
             clearTimeout(timeout);
         };
     }, [player.lastWin]);
-
-    useEffect(() => {
-        if (status === GameStatus.OVER) {
-            setOpenBets(true);
-        }
-    }, [status]);
 
     return (
         <>
@@ -44,7 +39,7 @@ export const GameField = () => {
                 <PlayerSeat seat={seats.byId[0]} />
             </Space>
             <PlaceBetsModal open={openBets} setOpen={setOpenBets} />
-            <GameoverModal open={openGameover} status={player.lastWin!} />
+            {player.lastWin && <GameoverModal open={openGameover} status={player.lastWin} />}
         </>
     );
 };

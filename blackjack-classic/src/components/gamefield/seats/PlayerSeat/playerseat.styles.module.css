@@ -37,4 +37,6 @@
 .login {
     color: var(--gold);
     opacity: 0.96;
+    font-weight: bold;
+    text-shadow: 0 0 1px black;
 }

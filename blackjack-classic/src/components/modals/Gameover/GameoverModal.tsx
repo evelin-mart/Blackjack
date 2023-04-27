@@ -17,15 +17,18 @@ export const GameoverModal = ({ open, status }: Props) => {
             : status.status === SeatStatus.PUSH
             ? 'push'
             : 'dealer wins';
+
     return (
         <Portal open={open}>
-            <div className={styles.title}>{content}</div>
-            {status.payout > 0 && (
-                <div className={styles.title}>
-                    {Signs[currency]}
-                    {status.payout}
-                </div>
-            )}
+            <div className={styles.wrapper}>
+                <div className={styles.title}>{content}</div>
+                {status.payout > 0 && (
+                    <div className={styles.title}>
+                        {Signs[currency]}
+                        {status.payout}
+                    </div>
+                )}
+            </div>
         </Portal>
     );
 };

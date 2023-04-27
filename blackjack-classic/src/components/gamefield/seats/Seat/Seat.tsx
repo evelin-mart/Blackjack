@@ -14,17 +14,18 @@ import {
 import styles from '../seats.styles.module.css';
 import { Tag } from 'antd';
 import { ActionsModal } from '../../../modals/Actions';
+import classNames from 'classnames';
 
 type Props = {
     seat: SeatState;
 };
 
 const Colors = {
-    Win: 'magenta',
-    Lose: 'red',
-    Push: 'blue',
-    Bust: 'red',
-    BJ: 'gold',
+    Win: 'success',
+    Lose: 'loose',
+    Push: 'push',
+    Bust: 'loose',
+    BJ: 'success',
 };
 
 export const Seat = ({ seat }: Props) => {
@@ -102,7 +103,7 @@ export const Seat = ({ seat }: Props) => {
                         src={`./assets/${card.suit}/${card.rank}.png`}
                         key={i}
                         className={styles.card}
-                        style={{ transform: `translate(${i * 16}px, -${i * 16}px)` }}
+                        style={{ transform: `translate(${i * 18}px, -${i * 18}px)` }}
                     />
                 ))}
                 {score > 0 && (
@@ -111,9 +112,10 @@ export const Seat = ({ seat }: Props) => {
                     </Tag>
                 )}
                 {status && (
-                    <Tag className={styles.status} color={Colors[status]}>
-                        {status}
-                    </Tag>
+                    <div className={styles.status}>
+                        <div className={classNames(styles.icon, styles[Colors[status]])} />
+                        <Tag color="black">{status}</Tag>
+                    </div>
                 )}
             </div>
         </>
