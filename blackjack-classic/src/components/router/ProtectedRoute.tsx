@@ -11,7 +11,11 @@ export const ProtectedRoute = ({ children }: { children: React.ReactElement }) =
         if (pathname === ROUTES.SIGN_IN || pathname === ROUTES.SIGN_UP) {
             return <Navigate to={ROUTES.LOBBY} />;
         }
-    } else if (pathname === ROUTES.PROFILE || pathname === ROUTES.LOBBY) {
+    } else if (
+        pathname === ROUTES.PROFILE ||
+        pathname === ROUTES.LOBBY ||
+        pathname === ROUTES.GAME
+    ) {
         return <Navigate to={ROUTES.HOME} />;
     }
 

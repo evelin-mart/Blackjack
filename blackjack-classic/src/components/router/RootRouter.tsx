@@ -13,47 +13,28 @@ const RootRouter = () => {
                 <Route
                     path={ROUTES.HOME}
                     element={
-                        <PageLayout>
-                            <Outlet />
-                        </PageLayout>
+                        <ProtectedRoute>
+                            <PageLayout>
+                                <Outlet />
+                            </PageLayout>
+                        </ProtectedRoute>
                     }
                 >
                     <Route index element={<HomePage />} />
-                    <Route
-                        path={ROUTES.PROFILE}
-                        element={
-                            <ProtectedRoute>
-                                <ProfilePage />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path={ROUTES.LOBBY}
-                        element={
-                            <ProtectedRoute>
-                                <LobbyPage />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path={ROUTES.SIGN_UP}
-                        element={
-                            <ProtectedRoute>
-                                <SignUpPage />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path={ROUTES.SIGN_IN}
-                        element={
-                            <ProtectedRoute>
-                                <SignInPage />
-                            </ProtectedRoute>
-                        }
-                    />
+                    <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+                    <Route path={ROUTES.LOBBY} element={<LobbyPage />} />
+                    <Route path={ROUTES.SIGN_UP} element={<SignUpPage />} />
+                    <Route path={ROUTES.SIGN_IN} element={<SignInPage />} />
                     <Route path="*" element={<Navigate to={ROUTES.HOME} />} />
                 </Route>
-                <Route path={ROUTES.GAME} element={<GamePage />} />
+                <Route
+                    path={ROUTES.GAME}
+                    element={
+                        <ProtectedRoute>
+                            <GamePage />
+                        </ProtectedRoute>
+                    }
+                />
             </Routes>
         </BrowserRouter>
     );

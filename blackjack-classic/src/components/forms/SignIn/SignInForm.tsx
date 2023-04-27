@@ -3,6 +3,7 @@ import { Button, Form } from 'antd';
 import { UserFormFields } from '../types';
 import { LoginInput } from '../LoginInput';
 import { PasswordInput } from '../PasswordInput';
+import { useCallback } from 'react';
 
 interface SignInForm {
     login: string;
@@ -17,18 +18,21 @@ export const SignInForm = () => {
     const { login } = useAuthorization();
     const [form] = Form.useForm<SignInForm>();
 
-    const onSubmit = (values: SignInForm) => {
-        try {
-            login(values);
-        } catch (e) {
-            form.setFields([
-                {
-                    name: UserFormFields.Login,
-                    errors: [(e as Error).message],
-                },
-            ]);
-        }
-    };
+    const onSubmit = useCallback(
+        (values: SignInForm) => {
+            try {
+                login(values);
+            } catch (e) {
+                form.setFields([
+                    {
+                        name: UserFormFields.Login,
+                        errors: [(e as Error).message],
+                    },
+                ]);
+            }
+        },
+        [login, form],
+    );
 
     return (
         <Form

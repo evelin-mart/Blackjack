@@ -1,8 +1,8 @@
 import { Cost, Rank } from '../../constants/suits';
-import { Card } from '../../types/deck';
+import { CardType } from '../../types/deck';
 import { DealerState, SeatStatus, SeatState, WinStatus } from './types';
 
-export const calculateScore = (cards: Card[]) => {
+export const calculateScore = (cards: CardType[]) => {
     let sum = cards.reduce((sum, card) => sum + Cost[card.rank], 0);
     if (sum > 21) {
         if (cards.some((card) => card.rank === Rank.Ace)) {
@@ -53,6 +53,12 @@ export const calculateWin = (dealerSeat: DealerState, playerSeat: SeatState): Wi
                 status: SeatStatus.LOSE,
             };
         }
+        if (!dealerBlackjack && playerBlackjack) {
+            return {
+                payout: bet * 1.5 * 2,
+                status: SeatStatus.BJ,
+            };
+        }
         return {
             payout: bet,
             status: SeatStatus.PUSH,
@@ -75,12 +81,12 @@ export const calculateWinStatus = (acc: WinStatus, current: WinStatus): WinStatu
     const payout = acc.payout + current.payout;
     let status = acc.status;
 
-    if (current.status !== SeatStatus.LOSE) {
-        if (current.status !== SeatStatus.PUSH) {
-            status = SeatStatus.WIN;
-        } else if (acc.status !== SeatStatus.WIN) {
-            status = SeatStatus.PUSH;
-        }
+    if (current.status === SeatStatus.WIN || current.status === SeatStatus.BJ) {
+        status = SeatStatus.WIN;
+    }
+
+    if (current.status === SeatStatus.PUSH && status !== SeatStatus.WIN) {
+        status = SeatStatus.PUSH;
     }
 
     return { status, payout };

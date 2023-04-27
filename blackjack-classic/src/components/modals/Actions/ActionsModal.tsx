@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import styles from './actions.styles.module.css';
 import { Actions } from '../../../constants/actions';
@@ -6,6 +6,7 @@ import { ReactComponent as Hit } from '../../../assets/plus.svg';
 import { ReactComponent as Stand } from '../../../assets/minus.svg';
 import { ReactComponent as Split } from '../../../assets/split.svg';
 import { Tooltip } from 'antd';
+import { Portal } from '../Portal';
 
 type Props = {
     isOpen: boolean;
@@ -26,10 +27,8 @@ export const ActionsModal = ({
     onSplit,
     onStand,
 }: Props) => {
-    const style = classNames(styles.mask, { [styles.active]: isOpen });
-
     return (
-        <div className={style}>
+        <Portal open={isOpen}>
             <div className={styles.content}>
                 <div
                     className={classNames(styles.button, styles.orange, {
@@ -50,7 +49,7 @@ export const ActionsModal = ({
                     </Tooltip>
                 </div>
                 <div
-                    className={classNames(styles.button, styles.green, {
+                    className={classNames(styles.button, styles.blue, {
                         [styles.inactive]: !isSplittable,
                     })}
                     onClick={onSplit}
@@ -60,6 +59,6 @@ export const ActionsModal = ({
                     </Tooltip>
                 </div>
             </div>
-        </div>
+        </Portal>
     );
 };

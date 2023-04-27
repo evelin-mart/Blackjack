@@ -1,0 +1,25 @@
+.mask {
+    position: fixed;
+    top: 64px;
+    inset-inline-end: 0;
+    bottom: 80px;
+    inset-inline-start: 0;
+    z-index: 1000;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    color: white;
+}

@@ -1,5 +1,4 @@
-import React, { useCallback, useState } from 'react';
-import classNames from 'classnames';
+import React, { useCallback } from 'react';
 import styles from './placebets.styles.module.css';
 import { Chip } from '../../chip';
 import {
@@ -19,6 +18,7 @@ import { ReactComponent as Redo } from '../../../assets/redo.svg';
 import { Tooltip } from 'antd';
 import { useNavigate } from 'react-router';
 import { ROUTES } from '../../../constants';
+import { Portal } from '../Portal';
 
 type Props = {
     open: boolean;
@@ -26,13 +26,12 @@ type Props = {
 };
 
 export const PlaceBetsModal = ({ open, setOpen }: Props) => {
-    const game = useGame();
-    const user = useUser();
+    const { player, seats } = useGame();
+    const { balance, currency } = useUser();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const totalBet = game.player.bets.reduce((acc, bet) => acc + game.seats.byId[bet].amount, 0);
-    const style = classNames(styles.mask, { [styles.active]: open });
+    const totalBet = player.bets.reduce((acc, bet) => acc + seats.byId[bet].amount, 0);
 
     const handleUndoBets = useCallback(() => {
         dispatch(addBalance(totalBet));
@@ -41,14 +40,14 @@ export const PlaceBetsModal = ({ open, setOpen }: Props) => {
 
     const handleRestoreBets = useCallback(() => {
         dispatch(addBalance(totalBet));
-        if (game.player.lastBet <= user.balance[user.currency] + totalBet) {
-            dispatch(reduceBalance(game.player.lastBet));
+        if (player.lastBet <= balance[currency] + totalBet) {
+            dispatch(reduceBalance(player.lastBet));
             dispatch(restoreBets());
         }
-    }, [dispatch, totalBet, game, user]);
+    }, [dispatch, totalBet, player, balance, currency]);
 
     const handleClose = useCallback(() => {
-        if (game.seats.allIds.some((id) => game.seats.byId[id].amount < 5)) {
+        if (seats.allIds.some((id) => seats.byId[id].amount < 5)) {
             setOpen(false);
             dispatch(addBalance(totalBet));
             dispatch(resetState());
@@ -56,48 +55,46 @@ export const PlaceBetsModal = ({ open, setOpen }: Props) => {
         } else {
             setOpen(false);
             for (let i = 0; i < 2; i++) {
-                game.seats.allIds.forEach((id) => {
+                seats.allIds.forEach((id) => {
                     dispatch(hitCard(id));
                 });
                 dispatch(hitCardDealer());
             }
         }
-    }, [game, dispatch]);
+    }, [seats, totalBet, dispatch]);
 
     return (
-        <div className={style}>
-            <div className={styles.wrapper}>
-                <div className={styles.content}>
-                    <div className={styles.button} onClick={handleUndoBets}>
-                        <Tooltip title="UNDO">
-                            <Undo fill="#ffffffd9" />
-                        </Tooltip>
-                    </div>
-                    <div className={styles.button}>
-                        <Chip value={1} />
-                    </div>
-                    <div className={styles.button}>
-                        <Chip value={5} />
-                    </div>
-                    <div className={styles.button}>
-                        <Chip value={10} />
-                    </div>
-                    <div className={styles.button}>
-                        <Chip value={25} />
-                    </div>
-                    <div className={styles.button}>
-                        <Chip value={100} />
-                    </div>
-                    <div className={styles.button} onClick={handleRestoreBets}>
-                        <Tooltip title="REPEAT">
-                            <Redo fill="#ffffffd9" />
-                        </Tooltip>
-                    </div>
+        <Portal open={open}>
+            <div className={styles.content}>
+                <div className={styles.button} onClick={handleUndoBets}>
+                    <Tooltip title="UNDO">
+                        <Undo fill="#ffffffd9" />
+                    </Tooltip>
                 </div>
-                <div className={styles.button} onClick={handleClose}>
-                    accept
+                <div className={styles.button}>
+                    <Chip value={1} />
+                </div>
+                <div className={styles.button}>
+                    <Chip value={5} />
+                </div>
+                <div className={styles.button}>
+                    <Chip value={10} />
+                </div>
+                <div className={styles.button}>
+                    <Chip value={25} />
+                </div>
+                <div className={styles.button}>
+                    <Chip value={100} />
+                </div>
+                <div className={styles.button} onClick={handleRestoreBets}>
+                    <Tooltip title="REPEAT">
+                        <Redo fill="#ffffffd9" />
+                    </Tooltip>
                 </div>
             </div>
-        </div>
+            <div className={styles.button} onClick={handleClose}>
+                accept
+            </div>
+        </Portal>
     );
 };

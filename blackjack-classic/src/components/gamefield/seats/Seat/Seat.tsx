@@ -28,11 +28,11 @@ const Colors = {
 };
 
 export const Seat = ({ seat }: Props) => {
-    const user = useUser();
+    const { balance, currency } = useUser();
     const game = useGame();
     const dispatch = useAppDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { cards, status, score, id, amount, splittedID, originID } = seat;
+    const { cards, status, score, id, amount, splittedID } = seat;
 
     useEffect(() => {
         if (score >= 21 && game.playingSeat === id) {
@@ -45,9 +45,11 @@ export const Seat = ({ seat }: Props) => {
     }, [score, game]);
 
     const isSplittable =
-        cards.length === 2 && !(splittedID || originID) && cards[0].rank === cards[1].rank;
+        cards.length === 2 &&
+        !('splittedID' in seat || 'originID' in seat) &&
+        cards[0].rank === cards[1].rank;
 
-    const canDoubleDown = user.balance[user.currency] >= amount && cards.length === 2;
+    const canDoubleDown = balance[currency] >= amount && cards.length === 2;
 
     const onHitCard = useCallback(() => {
         setIsModalOpen(false);
@@ -78,7 +80,7 @@ export const Seat = ({ seat }: Props) => {
     }, [isSplittable]);
 
     useEffect(() => {
-        if (splittedID) {
+        if ('splittedID' in seat) {
             dispatch(hitCard(splittedID!));
         }
     }, [splittedID]);

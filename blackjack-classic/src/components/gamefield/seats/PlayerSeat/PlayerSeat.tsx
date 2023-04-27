@@ -4,7 +4,6 @@ import { Seat } from '../Seat';
 import { SeatState, useGame, useUser } from '../../../../store';
 import styles from './playerseat.styles.module.css';
 import { Chip } from '../../../chip';
-import { ActionsModal } from '../../../modals/Actions';
 
 type Props = {
     seat: SeatState;

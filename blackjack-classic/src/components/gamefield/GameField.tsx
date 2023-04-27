@@ -5,21 +5,26 @@ import { PlayerSeat } from './seats/PlayerSeat';
 import { Space } from 'antd';
 import styles from './gamefield.styles.module.css';
 import { PlaceBetsModal } from '../modals/PlaceBets';
+import { GameoverModal } from '../modals/Gameover';
 
 export const GameField = () => {
     const { player, seats, status } = useGame();
     const dispatch = useAppDispatch();
-    const [isModalOpen, setIsModalOpen] = useState(true);
+    const [openBets, setOpenBets] = useState(true);
+    const [openGameover, setOpenGameover] = useState(false);
 
     useEffect(() => {
-        let timeout: number;
-        if (player.lastWin) {
+        let timeout: NodeJS.Timeout;
+        if (player.lastWin && status === GameStatus.PLAY) {
+            setOpenGameover(true);
+
             if (player.lastWin.payout > 0) {
                 dispatch(addBalance(player.lastWin.payout));
             }
             timeout = setTimeout(() => {
+                setOpenGameover(false);
                 dispatch(resetState());
-            }, 3000);
+            }, 3500);
         }
         return () => {
             clearTimeout(timeout);
@@ -28,7 +33,7 @@ export const GameField = () => {
 
     useEffect(() => {
         if (status === GameStatus.OVER) {
-            setIsModalOpen(true);
+            setOpenBets(true);
         }
     }, [status]);
 
@@ -38,7 +43,8 @@ export const GameField = () => {
                 <DealerSeat />
                 <PlayerSeat seat={seats.byId[0]} />
             </Space>
-            <PlaceBetsModal open={isModalOpen} setOpen={setIsModalOpen} />
+            <PlaceBetsModal open={openBets} setOpen={setOpenBets} />
+            <GameoverModal open={openGameover} status={player.lastWin!} />
         </>
     );
 };

@@ -66,6 +66,7 @@ export const GameSlice = createSlice({
                 score,
                 cards: [card],
                 originID: seat.id,
+                amount: seat.amount,
             };
             state.seats.allIds.push(id);
             state.player.bets.push(id);
@@ -81,8 +82,8 @@ export const GameSlice = createSlice({
             seat.score = score;
             if (seat.cards.length === 2 && seat.score === 21) {
                 seat.status = SeatStatus.BJ;
-                if (seat.originID) {
-                    state.seats.byId[seat.originID].blackjackCount += 1;
+                if ('originID' in seat) {
+                    state.seats.byId[seat.originID!].blackjackCount += 1;
                 } else {
                     seat.blackjackCount += 1;
                 }
@@ -118,24 +119,20 @@ export const GameSlice = createSlice({
                 score: 0,
                 cards: [],
             };
-            state.seats.allIds = state.seats.allIds.filter((id) => {
-                const seat = state.seats.byId[id];
-                const splitted = !!seat.originID;
-                if (splitted) {
-                    delete state.seats.byId[id];
-                } else {
-                    delete seat.splittedID;
-                    state.seats.byId[id] = {
-                        ...seat,
-                        score: 0,
-                        cards: [],
-                        amount: 0,
-                        status: '',
-                    };
-                }
-                return !splitted;
-            });
-            state.player.bets = state.player.bets.filter((id) => !state.seats.byId[id].originID);
+            const newIds = state.seats.allIds.filter((id) => !('originID' in state.seats.byId[id]));
+            const newSeats = newIds.reduce((acc, id) => {
+                acc[id] = {
+                    ...initialSeat,
+                    id: state.seats.byId[id].id,
+                    blackjackCount: state.seats.byId[id].blackjackCount,
+                };
+                return acc;
+            }, {} as typeof state.seats.byId);
+            state.player.bets = state.player.bets.filter(
+                (id) => !('originID' in state.seats.byId[id]),
+            );
+            state.seats.allIds = newIds;
+            state.seats.byId = newSeats;
             state.playingSeat = 0;
         },
         stand(state) {
