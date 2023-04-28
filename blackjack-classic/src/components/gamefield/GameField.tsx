@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { GameStatus, addBalance, resetState, useAppDispatch, useGame } from '../../store';
+import { GameStatus, addBalance, resetState, useAppDispatch, useGame, useUser } from '../../store';
 import { DealerSeat } from './seats';
 import { PlayerSeat } from './seats/PlayerSeat';
-import { Space } from 'antd';
+import { Button, Modal, Space } from 'antd';
 import styles from './gamefield.styles.module.css';
 import { PlaceBetsModal } from '../modals/PlaceBets';
 import { GameoverModal } from '../modals/Gameover';
+import { useNavigate } from 'react-router';
+import { ROUTES } from '../../constants';
 
 export const GameField = () => {
     const { player, seats, status } = useGame();
+    const { balance, currency } = useUser();
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const [openBets, setOpenBets] = useState(true);
     const [openGameover, setOpenGameover] = useState(false);
 
     useEffect(() => {
         let timeout: number;
-        if (player.lastWin && status === GameStatus.PLAY) {
+        if (player.lastWin && status === GameStatus.OVER) {
             setOpenGameover(true);
 
             if (player.lastWin.payout > 0) {
@@ -24,13 +28,34 @@ export const GameField = () => {
             timeout = setTimeout(() => {
                 setOpenGameover(false);
                 dispatch(resetState());
-                setOpenBets(true);
             }, 3500);
+        }
+        if (status === GameStatus.BETS) {
+            if (balance[currency] > 5) {
+                setOpenBets(true);
+            } else {
+                Modal.success({
+                    title: 'Thanks for the game! Come back again!',
+                    content: (
+                        <Button
+                            onClick={() => {
+                                Modal.destroyAll();
+                                navigate(ROUTES.PROFILE);
+                            }}
+                        >
+                            Top up the balance
+                        </Button>
+                    ),
+                    onOk: () => {
+                        navigate(ROUTES.LOBBY);
+                    },
+                });
+            }
         }
         return () => {
             clearTimeout(timeout);
         };
-    }, [player.lastWin]);
+    }, [player.lastWin, status]);
 
     return (
         <>

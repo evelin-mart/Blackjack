@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import styles from './placebets.styles.module.css';
-import { Chip } from '../../chip';
 import {
     addBalance,
     clearBets,
@@ -19,6 +18,7 @@ import { Tooltip } from 'antd';
 import { useNavigate } from 'react-router';
 import { ROUTES } from '../../../constants';
 import { Portal } from '../Portal';
+import { ChipButton, RoundButton } from '../../buttons';
 
 type Props = {
     open: boolean;
@@ -66,35 +66,26 @@ export const PlaceBetsModal = ({ open, setOpen }: Props) => {
     return (
         <Portal open={open}>
             <div className={styles.content}>
-                <div className={styles.button} onClick={handleUndoBets}>
+                <RoundButton onClick={handleUndoBets}>
                     <Tooltip title="UNDO">
-                        <Undo fill="#ffffffd9" />
+                        <Undo />
                     </Tooltip>
-                </div>
-                <div className={styles.button}>
-                    <Chip value={1} />
-                </div>
-                <div className={styles.button}>
-                    <Chip value={5} />
-                </div>
-                <div className={styles.button}>
-                    <Chip value={10} />
-                </div>
-                <div className={styles.button}>
-                    <Chip value={25} />
-                </div>
-                <div className={styles.button}>
-                    <Chip value={100} />
-                </div>
-                <div className={styles.button} onClick={handleRestoreBets}>
+                </RoundButton>
+                <ChipButton value={1} />
+                <ChipButton value={5} />
+                <ChipButton value={10} />
+                <ChipButton value={25} />
+                <ChipButton value={100} />
+                <RoundButton
+                    onClick={handleRestoreBets}
+                    isAvailable={player.lastBet <= balance[currency]}
+                >
                     <Tooltip title="REPEAT">
-                        <Redo fill="#ffffffd9" />
+                        <Redo />
                     </Tooltip>
-                </div>
+                </RoundButton>
             </div>
-            <div className={styles.button} onClick={handleClose}>
-                accept
-            </div>
+            <RoundButton onClick={handleClose}>accept</RoundButton>
         </Portal>
     );
 };

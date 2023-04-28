@@ -3,7 +3,7 @@
     width: 56.4px;
     height: 76.8px;
     border: 1px solid var(--soft-white);
-    border-radius: 5px;
+    border-radius: 7px;
 }
 
 .card {
@@ -50,4 +50,20 @@
     left: calc(50% - 14px);
     width: 28px;
     text-align: center;
+}
+
+.active {
+    animation: blinking 1s infinite ease-in-out;
+}
+
+@keyframes blinking {
+    0% {
+        box-shadow: 0 0 1px 1px white;
+    }
+    50% {
+        box-shadow: 0 0 5px 5px yellow;
+    }
+    100% {
+        box-shadow: 0 0 1px 1px white;
+    }
 }

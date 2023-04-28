@@ -7,6 +7,7 @@ import { ReactComponent as Stand } from '../../../assets/minus.svg';
 import { ReactComponent as Split } from '../../../assets/split.svg';
 import { Tooltip } from 'antd';
 import { Portal } from '../Portal';
+import { RoundButton } from '../../buttons';
 
 type Props = {
     isOpen: boolean;
@@ -30,34 +31,28 @@ export const ActionsModal = ({
     return (
         <Portal open={isOpen}>
             <div className={styles.content}>
-                <div
-                    className={classNames(styles.button, styles.orange, {
-                        [styles.inactive]: !canDoubleDown,
-                    })}
+                <RoundButton
+                    className={styles.orange}
                     onClick={onDoubleDown}
+                    isAvailable={canDoubleDown}
                 >
                     <Tooltip title={Actions.DD}>2x</Tooltip>
-                </div>
-                <div className={classNames(styles.button, styles.green)} onClick={onHitCard}>
+                </RoundButton>
+                <RoundButton className={styles.green} onClick={onHitCard}>
                     <Tooltip title={Actions.HIT}>
                         <Hit fill="#ffffffd9" />
                     </Tooltip>
-                </div>
-                <div className={classNames(styles.button, styles.red)} onClick={onStand}>
+                </RoundButton>
+                <RoundButton className={styles.red} onClick={onStand}>
                     <Tooltip title={Actions.STAND}>
                         <Stand fill="#ffffffd9" style={{ width: '100%', height: '100%' }} />
                     </Tooltip>
-                </div>
-                <div
-                    className={classNames(styles.button, styles.blue, {
-                        [styles.inactive]: !isSplittable,
-                    })}
-                    onClick={onSplit}
-                >
+                </RoundButton>
+                <RoundButton className={styles.blue} onClick={onSplit} isAvailable={isSplittable}>
                     <Tooltip title={Actions.SPLIT}>
                         <Split fill="#ffffffd9" />
                     </Tooltip>
-                </div>
+                </RoundButton>
             </div>
         </Portal>
     );

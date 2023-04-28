@@ -48,7 +48,8 @@ export const Seat = ({ seat }: Props) => {
     const isSplittable =
         cards.length === 2 &&
         !('splittedID' in seat || 'originID' in seat) &&
-        cards[0].rank === cards[1].rank;
+        cards[0].rank === cards[1].rank &&
+        balance[currency] >= amount;
 
     const canDoubleDown = balance[currency] >= amount && cards.length === 2;
 
@@ -77,14 +78,17 @@ export const Seat = ({ seat }: Props) => {
             setIsModalOpen(false);
             dispatch(splitPair(id));
             dispatch(hitCard(id));
+            dispatch(reduceBalance(amount));
         }
-    }, [isSplittable]);
+    }, [isSplittable, amount]);
 
     useEffect(() => {
         if ('splittedID' in seat) {
             dispatch(hitCard(splittedID!));
         }
     }, [splittedID]);
+
+    const style = classNames(styles.wrapper, { [styles.active]: game.playingSeat === id });
 
     return (
         <>
@@ -97,7 +101,7 @@ export const Seat = ({ seat }: Props) => {
                 onSplit={onSplit}
                 onStand={onStand}
             />
-            <div className={styles.wrapper}>
+            <div className={style}>
                 {cards.map((card, i) => (
                     <img
                         src={`./assets/${card.suit}/${card.rank}.png`}

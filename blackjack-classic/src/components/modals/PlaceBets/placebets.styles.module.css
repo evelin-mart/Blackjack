@@ -13,14 +13,7 @@
     gap: 8px;
 }
 
-.button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--soft-white);
-    border-radius: 50%;
-    cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.45);
+.inactive {
+    filter: brightness(0.5);
+    cursor: default;
 }

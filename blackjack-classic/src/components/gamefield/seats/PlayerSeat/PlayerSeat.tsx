@@ -10,23 +10,21 @@ type Props = {
 };
 
 export const PlayerSeat = ({ seat }: Props) => {
-    const user = useUser();
-    const game = useGame();
+    const { login } = useUser();
+    const { seats } = useGame();
 
     return (
         <div className={styles.wrapper}>
             <Space size={25}>
                 <Seat seat={seat} />
-                {seat.splittedID && <Seat seat={game.seats.byId[seat.splittedID]} />}
+                {seat.splittedID && <Seat seat={seats.byId[seat.splittedID]} />}
             </Space>
-            <div className={styles.bet}>
-                {seat.amount > 0 && <Chip value={seat.amount} isActive={false} />}
-            </div>
+            <div className={styles.bet}>{seat.amount > 0 && <Chip value={seat.amount} />}</div>
             <div className={styles.user}>
                 {seat.blackjackCount > 0 && (
                     <div className={styles.count}>{seat.blackjackCount}</div>
                 )}
-                <div className={styles.login}>{user.login}</div>
+                <div className={styles.login}>{login}</div>
             </div>
         </div>
     );

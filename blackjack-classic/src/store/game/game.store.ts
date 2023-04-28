@@ -25,7 +25,7 @@ const initialDealer = {
 const initialState: GameState = {
     redCardPos: Deck.getRedCardPos(),
     deck: Deck.shuffle(),
-    status: GameStatus.OVER,
+    status: GameStatus.BETS,
     seats: {
         byId: {
             0: initialSeat,
@@ -98,6 +98,7 @@ export const GameSlice = createSlice({
             state.dealer.score = calculateScore(state.dealer.cards);
         },
         endGame(state) {
+            state.status = GameStatus.OVER;
             state.player.lastWin = state.player.bets.reduce(
                 (acc: WinStatus, id) => {
                     const seat = state.seats.byId[id];
@@ -109,7 +110,7 @@ export const GameSlice = createSlice({
             );
         },
         resetState(state) {
-            state.status = GameStatus.OVER;
+            state.status = GameStatus.BETS;
             state.player.lastBet = state.seats.byId[0].amount;
             if (state.deck.length <= state.redCardPos) {
                 state.deck = Deck.shuffle();

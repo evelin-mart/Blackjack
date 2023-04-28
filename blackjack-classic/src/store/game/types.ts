@@ -36,6 +36,7 @@ export interface DealerState {
 }
 
 export enum GameStatus {
+    BETS,
     PLAY,
     OVER,
 }

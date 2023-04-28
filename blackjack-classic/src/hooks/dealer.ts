@@ -11,13 +11,16 @@ export const useDealer = () => {
     const isDealerTurn = playingSeat === seats.allIds.length;
 
     useEffect(() => {
+        let timeout: number;
         if (isDealerTurn) {
-            setShownScore(score);
-            if (score < 17) {
-                dispatch(hitCardDealer());
-            } else {
-                dispatch(endGame());
-            }
+            timeout = setTimeout(() => {
+                setShownScore(score);
+                if (score < 17) {
+                    dispatch(hitCardDealer());
+                } else {
+                    dispatch(endGame());
+                }
+            }, 500);
         } else if (cards.length) {
             if (shownScore === 0) {
                 setShownScore(Cost[cards[0].rank]);
@@ -25,6 +28,10 @@ export const useDealer = () => {
         } else {
             setShownScore(0);
         }
+
+        return () => {
+            clearTimeout(timeout);
+        };
     }, [isDealerTurn, cards, score]);
 
     return { cards, shownScore, isDealerTurn };
