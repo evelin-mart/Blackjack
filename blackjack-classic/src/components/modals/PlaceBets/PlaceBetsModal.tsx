@@ -8,13 +8,14 @@ import {
     reduceBalance,
     resetState,
     restoreBets,
+    startGame,
     useAppDispatch,
     useGame,
     useUser,
 } from '../../../store';
 import { ReactComponent as Undo } from '../../../assets/undo.svg';
 import { ReactComponent as Redo } from '../../../assets/redo.svg';
-import { Tooltip } from 'antd';
+import { Modal, Tooltip } from 'antd';
 import { useNavigate } from 'react-router';
 import { ROUTES } from '../../../constants';
 import { Portal } from '../Portal';
@@ -47,13 +48,18 @@ export const PlaceBetsModal = ({ open, setOpen }: Props) => {
     }, [dispatch, totalBet, player, balance, currency]);
 
     const handleClose = useCallback(() => {
-        if (seats.allIds.some((id) => seats.byId[id].amount < 5)) {
-            setOpen(false);
+        if (!seats.allIds.filter((id) => seats.byId[id].amount >= 5).length) {
             dispatch(addBalance(totalBet));
             dispatch(resetState());
-            navigate(ROUTES.LOBBY);
+            Modal.success({
+                title: 'Thanks for the game! Come back again!',
+                onOk: () => {
+                    navigate(ROUTES.LOBBY);
+                },
+            });
         } else {
             setOpen(false);
+            dispatch(startGame());
             for (let i = 0; i < 2; i++) {
                 seats.allIds.forEach((id) => {
                     dispatch(hitCard(id));

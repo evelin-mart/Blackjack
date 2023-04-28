@@ -51,7 +51,8 @@ export interface GameState {
         };
         allIds: number[];
     };
+    stack: ('dealer' | number)[];
     player: Player;
     dealer: DealerState;
-    playingSeat: number;
+    playingSeat: 'dealer' | number;
 }

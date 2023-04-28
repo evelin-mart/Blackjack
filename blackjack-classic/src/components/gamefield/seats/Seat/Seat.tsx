@@ -83,9 +83,15 @@ export const Seat = ({ seat }: Props) => {
     }, [isSplittable, amount]);
 
     useEffect(() => {
+        let timeout: number;
         if ('splittedID' in seat) {
-            dispatch(hitCard(splittedID!));
+            timeout = setTimeout(() => {
+                dispatch(hitCard(splittedID!));
+            }, 250);
         }
+        return () => {
+            clearTimeout(timeout);
+        };
     }, [splittedID]);
 
     const style = classNames(styles.wrapper, { [styles.active]: game.playingSeat === id });

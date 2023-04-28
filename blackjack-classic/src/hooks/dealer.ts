@@ -4,11 +4,11 @@ import { Cost } from '../constants';
 
 export const useDealer = () => {
     const dispatch = useAppDispatch();
-    const { seats, playingSeat, dealer } = useGame();
+    const { playingSeat, dealer } = useGame();
     const { cards, score } = dealer;
     const [shownScore, setShownScore] = useState(0);
 
-    const isDealerTurn = playingSeat === seats.allIds.length;
+    const isDealerTurn = playingSeat === 'dealer';
 
     useEffect(() => {
         let timeout: number;

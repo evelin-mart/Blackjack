@@ -22,6 +22,8 @@ const initialDealer = {
     cards: [],
 };
 
+const initialStack = ['dealer', 0];
+
 const initialState: GameState = {
     redCardPos: Deck.getRedCardPos(),
     deck: Deck.shuffle(),
@@ -32,9 +34,10 @@ const initialState: GameState = {
         },
         allIds: [0],
     },
+    stack: initialStack,
     player: initialPlayer,
     dealer: initialDealer,
-    playingSeat: 0,
+    playingSeat: null,
 };
 
 export const GameSlice = createSlice({
@@ -70,11 +73,9 @@ export const GameSlice = createSlice({
             };
             state.seats.allIds.push(id);
             state.player.bets.push(id);
+            state.stack.push(id);
         },
         hitCard(state, action: PayloadAction<number>) {
-            if (state.status !== GameStatus.PLAY) {
-                state.status = GameStatus.PLAY;
-            }
             const card = state.deck.pop()!;
             const seat = state.seats.byId[action.payload];
             seat.cards.push(card);
@@ -96,6 +97,10 @@ export const GameSlice = createSlice({
             const card = state.deck.pop()!;
             state.dealer.cards.push(card);
             state.dealer.score = calculateScore(state.dealer.cards);
+        },
+        startGame(state) {
+            state.status = GameStatus.PLAY;
+            state.playingSeat = state.stack.pop();
         },
         endGame(state) {
             state.status = GameStatus.OVER;
@@ -129,15 +134,15 @@ export const GameSlice = createSlice({
                 };
                 return acc;
             }, {} as typeof state.seats.byId);
-            state.player.bets = state.player.bets.filter(
-                (id) => !('originID' in state.seats.byId[id]),
-            );
+            const newBets = state.player.bets.filter((id) => !('originID' in state.seats.byId[id]));
+            state.player.bets = newBets;
             state.seats.allIds = newIds;
             state.seats.byId = newSeats;
-            state.playingSeat = 0;
+            state.playingSeat = null;
+            state.stack = ['dealer', ...newBets.sort()];
         },
         stand(state) {
-            state.playingSeat += 1;
+            state.playingSeat = state.stack.pop();
         },
     },
 });
@@ -153,4 +158,5 @@ export const {
     stand,
     resetState,
     doubleBet,
+    startGame,
 } = GameSlice.actions;
