@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    GameStatus,
     SeatState,
     doubleBet,
     hitCard,
@@ -30,20 +29,20 @@ const Colors = {
 
 export const Seat = ({ seat }: Props) => {
     const { balance, currency } = useUser();
-    const game = useGame();
+    const { playingSeat } = useGame();
     const dispatch = useAppDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { cards, status, score, id, amount, splittedID } = seat;
 
     useEffect(() => {
-        if (score >= 21 && game.playingSeat === id) {
+        if (score >= 21 && playingSeat === id) {
             setIsModalOpen(false);
             dispatch(stand());
         }
-        if (game.status === GameStatus.PLAY && game.playingSeat === id && score < 21) {
+        if (playingSeat === id && score < 21) {
             setIsModalOpen(true);
         }
-    }, [score, game]);
+    }, [score, playingSeat, cards]);
 
     const isSplittable =
         cards.length === 2 &&
@@ -76,14 +75,14 @@ export const Seat = ({ seat }: Props) => {
     const onSplit = useCallback(() => {
         if (isSplittable) {
             setIsModalOpen(false);
+            dispatch(reduceBalance(amount));
             dispatch(splitPair(id));
             dispatch(hitCard(id));
-            dispatch(reduceBalance(amount));
         }
     }, [isSplittable, amount]);
 
     useEffect(() => {
-        let timeout: number;
+        let timeout: NodeJS.Timeout;
         if ('splittedID' in seat) {
             timeout = setTimeout(() => {
                 dispatch(hitCard(splittedID!));
@@ -94,7 +93,7 @@ export const Seat = ({ seat }: Props) => {
         };
     }, [splittedID]);
 
-    const style = classNames(styles.wrapper, { [styles.active]: game.playingSeat === id });
+    const style = classNames(styles.wrapper, { [styles.active]: playingSeat === id });
 
     return (
         <>

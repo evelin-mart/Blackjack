@@ -14,6 +14,7 @@ export interface SeatState {
     cards: CardType[];
     amount: number;
     status: SeatStatus | '';
+    player: string | null;
     blackjackCount: number;
     splittedID?: number;
     originID?: number;
@@ -51,8 +52,14 @@ export interface GameState {
         };
         allIds: number[];
     };
-    stack: ('dealer' | number)[];
+    stack: number[];
     player: Player;
     dealer: DealerState;
-    playingSeat: 'dealer' | number;
+    playingSeat: number | null;
+}
+
+export interface TakePlaceAction {
+    id: number;
+    player: string;
+    amount: number;
 }

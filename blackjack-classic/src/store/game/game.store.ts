@@ -1,10 +1,18 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Deck } from '../../utils/deck';
-import { GameState, GameStatus, Player, SeatStatus, SeatState, WinStatus } from './types';
+import {
+    GameState,
+    GameStatus,
+    Player,
+    SeatStatus,
+    SeatState,
+    WinStatus,
+    TakePlaceAction,
+} from './types';
 import { calculateScore, calculateWin, calculateWinStatus } from './utils';
 
 const initialPlayer: Player = {
-    bets: [0],
+    bets: [5, 4, 3],
     lastBet: 0,
 };
 
@@ -14,25 +22,36 @@ const initialSeat: SeatState = {
     cards: [],
     amount: 0,
     status: '',
+    player: null,
     blackjackCount: 0,
 };
+
+const initialSeats = Array(7)
+    .fill(0)
+    .reduce((acc, _, id) => {
+        acc[id + 1] = {
+            ...initialSeat,
+            id: id + 1,
+        };
+        return acc;
+    }, {});
 
 const initialDealer = {
     score: 0,
     cards: [],
 };
 
-const initialStack = ['dealer', 0];
+const initialStack = [0];
+
+const initialIds = [1, 2, 3, 4, 5, 6, 7];
 
 const initialState: GameState = {
     redCardPos: Deck.getRedCardPos(),
     deck: Deck.shuffle(),
     status: GameStatus.BETS,
     seats: {
-        byId: {
-            0: initialSeat,
-        },
-        allIds: [0],
+        byId: initialSeats,
+        allIds: initialIds,
     },
     stack: initialStack,
     player: initialPlayer,
@@ -44,11 +63,20 @@ export const GameSlice = createSlice({
     name: 'game',
     initialState,
     reducers: {
+        takeseat(state, action: PayloadAction<TakePlaceAction>) {
+            const { amount, id, player } = action.payload;
+            state.player.bets.push(id);
+            state.seats.byId[id] = {
+                ...state.seats.byId[id],
+                amount,
+                player
+            };
+        },
         addBets(state, action: PayloadAction<number>) {
             state.player.bets.map((id) => (state.seats.byId[id].amount += action.payload));
         },
         doubleBet(state) {
-            state.seats.byId[state.playingSeat].amount *= 2;
+            state.seats.byId[state.playingSeat!].amount *= 2;
         },
         restoreBets(state) {
             state.player.bets.map((id) => (state.seats.byId[id].amount = state.player.lastBet));
@@ -60,7 +88,7 @@ export const GameSlice = createSlice({
             const seat = state.seats.byId[action.payload];
             const card = seat.cards.pop()!;
             const score = seat.score / 2;
-            const id = state.seats.allIds.length;
+            const id = +Date.now();
             seat.score /= 2;
             seat.splittedID = id;
             state.seats.byId[id] = {
@@ -69,6 +97,7 @@ export const GameSlice = createSlice({
                 score,
                 cards: [card],
                 originID: seat.id,
+                player: seat.player,
                 amount: seat.amount,
             };
             state.seats.allIds.push(id);
@@ -100,7 +129,10 @@ export const GameSlice = createSlice({
         },
         startGame(state) {
             state.status = GameStatus.PLAY;
-            state.playingSeat = state.stack.pop();
+            const stack = [...state.player.bets.sort()];
+            state.playingSeat = stack.pop()!;
+            state.stack.push(...stack);
+            state.player.lastBet = state.seats.byId[state.player.bets[0]].amount;
         },
         endGame(state) {
             state.status = GameStatus.OVER;
@@ -116,7 +148,6 @@ export const GameSlice = createSlice({
         },
         resetState(state) {
             state.status = GameStatus.BETS;
-            state.player.lastBet = state.seats.byId[0].amount;
             if (state.deck.length <= state.redCardPos) {
                 state.deck = Deck.shuffle();
                 state.redCardPos = Deck.getRedCardPos();
@@ -125,24 +156,24 @@ export const GameSlice = createSlice({
                 score: 0,
                 cards: [],
             };
-            const newIds = state.seats.allIds.filter((id) => !('originID' in state.seats.byId[id]));
-            const newSeats = newIds.reduce((acc, id) => {
+            const newSeats = initialIds.reduce((acc, id) => {
                 acc[id] = {
                     ...initialSeat,
                     id: state.seats.byId[id].id,
+                    player: state.seats.byId[id].player,
                     blackjackCount: state.seats.byId[id].blackjackCount,
                 };
                 return acc;
             }, {} as typeof state.seats.byId);
-            const newBets = state.player.bets.filter((id) => !('originID' in state.seats.byId[id]));
+            const newBets = state.player.bets.filter((id) => id <= 7);
             state.player.bets = newBets;
-            state.seats.allIds = newIds;
+            state.seats.allIds = initialIds;
             state.seats.byId = newSeats;
             state.playingSeat = null;
-            state.stack = ['dealer', ...newBets.sort()];
+            state.stack = [0];
         },
         stand(state) {
-            state.playingSeat = state.stack.pop();
+            state.playingSeat = state.stack.pop()!;
         },
     },
 });

@@ -18,7 +18,7 @@ export const GameField = () => {
     const [openGameover, setOpenGameover] = useState(false);
 
     useEffect(() => {
-        let timeout: number;
+        let timeout: NodeJS.Timeout;
         if (player.lastWin && status === GameStatus.OVER) {
             setOpenGameover(true);
 
@@ -61,7 +61,11 @@ export const GameField = () => {
         <>
             <Space className={styles.field}>
                 <DealerSeat />
-                <PlayerSeat seat={seats.byId[0]} />
+                <Space size={50}>
+                    {seats.allIds.map((id) =>
+                        id <= 7 ? <PlayerSeat key={id} seat={seats.byId[id]} /> : null,
+                    )}
+                </Space>
             </Space>
             <PlaceBetsModal open={openBets} setOpen={setOpenBets} />
             {player.lastWin && <GameoverModal open={openGameover} status={player.lastWin} />}

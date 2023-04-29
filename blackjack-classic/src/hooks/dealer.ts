@@ -8,10 +8,10 @@ export const useDealer = () => {
     const { cards, score } = dealer;
     const [shownScore, setShownScore] = useState(0);
 
-    const isDealerTurn = playingSeat === 'dealer';
+    const isDealerTurn = playingSeat === 0;
 
     useEffect(() => {
-        let timeout: number;
+        let timeout: NodeJS.Timeout;
         if (isDealerTurn) {
             timeout = setTimeout(() => {
                 setShownScore(score);

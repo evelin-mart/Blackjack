@@ -19,6 +19,7 @@
 }
 
 .user {
+    height: 21px;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -39,4 +40,20 @@
     opacity: 0.96;
     font-weight: bold;
     text-shadow: 0 0 1px black;
+}
+
+.active {
+    animation: blinking 1s infinite ease-in-out;
+}
+
+@keyframes blinking {
+    0% {
+        box-shadow: 0 0 1px 1px white;
+    }
+    50% {
+        box-shadow: 0 0 5px 5px yellow;
+    }
+    100% {
+        box-shadow: 0 0 1px 1px white;
+    }
 }
