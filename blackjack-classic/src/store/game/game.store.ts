@@ -12,7 +12,7 @@ import {
 import { calculateScore, calculateWin, calculateWinStatus } from './utils';
 
 const initialPlayer: Player = {
-    bets: [5, 4, 3],
+    bets: [],
     lastBet: 0,
 };
 
@@ -63,14 +63,21 @@ export const GameSlice = createSlice({
     name: 'game',
     initialState,
     reducers: {
-        takeseat(state, action: PayloadAction<TakePlaceAction>) {
+        takeSeat(state, action: PayloadAction<TakePlaceAction>) {
             const { amount, id, player } = action.payload;
             state.player.bets.push(id);
             state.seats.byId[id] = {
                 ...state.seats.byId[id],
                 amount,
-                player
+                player,
             };
+        },
+        leaveSeat(state, action: PayloadAction<number>) {
+            state.seats.byId[action.payload] = {
+                ...initialSeat,
+                id: action.payload,
+            };
+            state.player.bets = state.player.bets.filter((id) => id !== action.payload);
         },
         addBets(state, action: PayloadAction<number>) {
             state.player.bets.map((id) => (state.seats.byId[id].amount += action.payload));
@@ -190,4 +197,6 @@ export const {
     resetState,
     doubleBet,
     startGame,
+    leaveSeat,
+    takeSeat,
 } = GameSlice.actions;

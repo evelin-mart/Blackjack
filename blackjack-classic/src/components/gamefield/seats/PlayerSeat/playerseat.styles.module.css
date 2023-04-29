@@ -15,7 +15,7 @@
     border-radius: 50%;
     border: 1px solid var(--soft-white);
     text-align: center;
-    cursor: default;
+    z-index: 1500;
 }
 
 .user {
@@ -35,6 +35,20 @@
     border-radius: 50%;
 }
 
+.leave {
+    width: 13px;
+    height: 13px;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 13px;
+    background-color: rgba(85, 85, 85, 0.85);
+    color: var(--soft-white);
+    border-radius: 50%;
+    z-index: 1500;
+    cursor: pointer;
+    user-select: none;
+}
+
 .login {
     color: var(--gold);
     opacity: 0.96;
@@ -44,6 +58,7 @@
 
 .active {
     animation: blinking 1s infinite ease-in-out;
+    cursor: pointer;
 }
 
 @keyframes blinking {

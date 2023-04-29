@@ -35,13 +35,19 @@ export const Seat = ({ seat }: Props) => {
     const { cards, status, score, id, amount, splittedID } = seat;
 
     useEffect(() => {
+        let timeout: NodeJS.Timeout;
         if (score >= 21 && playingSeat === id) {
             setIsModalOpen(false);
             dispatch(stand());
         }
         if (playingSeat === id && score < 21) {
-            setIsModalOpen(true);
+            setTimeout(() => {
+                setIsModalOpen(true);
+            }, 250);
         }
+        return () => {
+            clearTimeout(timeout);
+        };
     }, [score, playingSeat, cards]);
 
     const isSplittable =

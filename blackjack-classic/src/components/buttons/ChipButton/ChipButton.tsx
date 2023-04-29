@@ -12,7 +12,7 @@ export const ChipButton = ({ value }: Props) => {
     const { player } = useGame();
     const dispatch = useAppDispatch();
 
-    const isAvailable = value * player.bets.length <= balance[currency];
+    const isAvailable = !!player.bets.length && value * player.bets.length <= balance[currency];
 
     const handleClick = useCallback(() => {
         if (isAvailable) {

@@ -72,7 +72,7 @@ export const PlaceBetsModal = ({ open, setOpen }: Props) => {
     return (
         <Portal open={open}>
             <div className={styles.content}>
-                <RoundButton onClick={handleUndoBets}>
+                <RoundButton onClick={handleUndoBets} isAvailable={!!player.bets.length}>
                     <Tooltip title="UNDO">
                         <Undo />
                     </Tooltip>
@@ -84,7 +84,10 @@ export const PlaceBetsModal = ({ open, setOpen }: Props) => {
                 <ChipButton value={100} />
                 <RoundButton
                     onClick={handleRestoreBets}
-                    isAvailable={player.lastBet * player.bets.length <= balance[currency]}
+                    isAvailable={
+                        !!player.bets.length &&
+                        player.lastBet * player.bets.length <= balance[currency]
+                    }
                 >
                     <Tooltip title="REPEAT">
                         <Redo />
