@@ -7,8 +7,6 @@ import {
     splitPair,
     stand,
     useAppDispatch,
-    useGame,
-    useUser,
 } from '../../../../store';
 import styles from '../seats.styles.module.css';
 import { Tag } from 'antd';
@@ -17,6 +15,8 @@ import classNames from 'classnames';
 
 type Props = {
     seat: SeatState;
+    balance: number;
+    playingSeat: number | null;
 };
 
 const Colors = {
@@ -27,15 +27,13 @@ const Colors = {
     BJ: 'success',
 };
 
-export const Seat = ({ seat }: Props) => {
-    const { balance, currency } = useUser();
-    const { playingSeat } = useGame();
+export const Seat = ({ seat, balance, playingSeat }: Props) => {
     const dispatch = useAppDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { cards, status, score, id, amount, splittedID } = seat;
 
     useEffect(() => {
-        let timeout: NodeJS.Timeout;
+        let timeout: ReturnType<typeof setTimeout>;
         if (score >= 21 && playingSeat === id) {
             setIsModalOpen(false);
             dispatch(stand());
@@ -54,9 +52,9 @@ export const Seat = ({ seat }: Props) => {
         cards.length === 2 &&
         !('splittedID' in seat || 'originID' in seat) &&
         cards[0].rank === cards[1].rank &&
-        balance[currency] >= amount;
+        balance >= amount;
 
-    const canDoubleDown = balance[currency] >= amount && cards.length === 2;
+    const canDoubleDown = balance >= amount && cards.length === 2;
 
     const onHitCard = useCallback(() => {
         setIsModalOpen(false);
@@ -88,7 +86,7 @@ export const Seat = ({ seat }: Props) => {
     }, [isSplittable, amount]);
 
     useEffect(() => {
-        let timeout: NodeJS.Timeout;
+        let timeout: ReturnType<typeof setTimeout>;
         if ('splittedID' in seat) {
             timeout = setTimeout(() => {
                 dispatch(hitCard(splittedID!));

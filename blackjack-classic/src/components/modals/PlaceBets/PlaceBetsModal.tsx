@@ -10,8 +10,6 @@ import {
     restoreBets,
     startGame,
     useAppDispatch,
-    useGame,
-    useUser,
 } from '../../../store';
 import { ReactComponent as Undo } from '../../../assets/undo.svg';
 import { ReactComponent as Redo } from '../../../assets/redo.svg';
@@ -20,19 +18,14 @@ import { useNavigate } from 'react-router';
 import { ROUTES } from '../../../constants';
 import { Portal } from '../Portal';
 import { ChipButton, RoundButton } from '../../buttons';
+import { Props } from './placebets.types';
 
-type Props = {
-    open: boolean;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export const PlaceBetsModal = ({ open, setOpen }: Props) => {
-    const { player, seats } = useGame();
-    const { balance, currency } = useUser();
+export const PlaceBetsModal = ({ open, setOpen, balance, player, seats }: Props) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const { bets, lastBet } = player;
 
-    const totalBet = player.bets.reduce((acc, bet) => acc + seats.byId[bet].amount, 0);
+    const totalBet = bets.reduce((acc, bet) => acc + seats[bet].amount, 0);
 
     const handleUndoBets = useCallback(() => {
         dispatch(addBalance(totalBet));
@@ -41,14 +34,14 @@ export const PlaceBetsModal = ({ open, setOpen }: Props) => {
 
     const handleRestoreBets = useCallback(() => {
         dispatch(addBalance(totalBet));
-        if (player.lastBet * player.bets.length <= balance[currency] + totalBet) {
-            dispatch(reduceBalance(player.lastBet * player.bets.length));
+        if (lastBet * bets.length <= balance + totalBet) {
+            dispatch(reduceBalance(lastBet * bets.length));
             dispatch(restoreBets());
         }
-    }, [dispatch, totalBet, player, balance, currency]);
+    }, [dispatch, totalBet, player, balance]);
 
     const handleClose = useCallback(() => {
-        if (!player.bets.length || seats.byId[player.bets[0]].amount < 5) {
+        if (!bets.length || seats[bets[0]].amount < 5) {
             dispatch(addBalance(totalBet));
             dispatch(resetState());
             Modal.success({
@@ -61,33 +54,28 @@ export const PlaceBetsModal = ({ open, setOpen }: Props) => {
             setOpen(false);
             dispatch(startGame());
             for (let i = 0; i < 2; i++) {
-                player.bets.forEach((id) => {
+                bets.forEach((id) => {
                     dispatch(hitCard(id));
                 });
                 dispatch(hitCardDealer());
             }
         }
-    }, [seats, totalBet, player, dispatch]);
+    }, [seats, totalBet, bets, dispatch]);
 
     return (
         <Portal open={open}>
             <div className={styles.content}>
-                <RoundButton onClick={handleUndoBets} isAvailable={!!player.bets.length}>
+                <RoundButton onClick={handleUndoBets} isAvailable={!!bets.length}>
                     <Tooltip title="UNDO">
                         <Undo />
                     </Tooltip>
                 </RoundButton>
-                <ChipButton value={1} />
-                <ChipButton value={5} />
-                <ChipButton value={10} />
-                <ChipButton value={25} />
-                <ChipButton value={100} />
+                {[1, 5, 10, 25, 100].map((value) => (
+                    <ChipButton value={value} key={value} balance={balance} bets={bets} />
+                ))}
                 <RoundButton
                     onClick={handleRestoreBets}
-                    isAvailable={
-                        !!player.bets.length &&
-                        player.lastBet * player.bets.length <= balance[currency]
-                    }
+                    isAvailable={!!bets.length && lastBet * bets.length <= balance + totalBet}
                 >
                     <Tooltip title="REPEAT">
                         <Redo />

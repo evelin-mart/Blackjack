@@ -6,6 +6,7 @@ import {
     SeatState,
     addBalance,
     leaveSeat,
+    reduceBalance,
     takeSeat,
     useAppDispatch,
     useGame,
@@ -17,26 +18,32 @@ import classNames from 'classnames';
 
 type Props = {
     seat: SeatState;
+    balance: number;
 };
 
-export const PlayerSeat = ({ seat }: Props) => {
-    const { balance, currency, login } = useUser();
-    const { seats, player, status } = useGame();
+export const PlayerSeat = ({ seat, balance }: Props) => {
+    const { login } = useUser();
+    const { seats, player, status, playingSeat } = useGame();
     const dispatch = useAppDispatch();
+    
     const canBeTaken =
         !seat.player &&
-        ((player.bets.length && balance[currency] >= seats.byId[player.bets[0]].amount) ||
+        ((player.bets.length && balance >= seats.byId[player.bets[0]].amount) ||
             !player.bets.length) &&
         status === GameStatus.BETS;
     const style = classNames(styles.bet, { [styles.active]: canBeTaken });
 
     const take = useCallback(() => {
         if (canBeTaken) {
+            const amount = player.bets.length ? seats.byId[player.bets[0]].amount : 0;
+            if (amount > 0) {
+                dispatch(reduceBalance(amount));
+            }
             dispatch(
                 takeSeat({
                     id: seat.id,
                     player: login,
-                    amount: player.bets.length ? seats.byId[player.bets[0]].amount : 0,
+                    amount,
                 }),
             );
         }
@@ -52,8 +59,14 @@ export const PlayerSeat = ({ seat }: Props) => {
     return (
         <div className={styles.wrapper}>
             <Space size={25}>
-                {seat.splittedID && <Seat seat={seats.byId[seat.splittedID]} />}
-                <Seat seat={seat} />
+                {seat.splittedID && (
+                    <Seat
+                        seat={seats.byId[seat.splittedID]}
+                        balance={balance}
+                        playingSeat={playingSeat}
+                    />
+                )}
+                <Seat seat={seat} balance={balance} playingSeat={playingSeat} />
             </Space>
             <div className={style} onClick={take}>
                 {seat.amount > 0 && <Chip value={seat.amount} />}
