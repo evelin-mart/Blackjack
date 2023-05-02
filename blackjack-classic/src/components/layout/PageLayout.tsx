@@ -21,7 +21,11 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
                 >
                     evelin-mart
                 </Typography.Link>
-                {' for Evolution TS Bootcamp 2023'}
+                {' for '}
+                <Typography.Link href="https://www.evolution.com/" target="blank" rel="noreferrer">
+                    Evolution
+                </Typography.Link>
+                {' TS Bootcamp 2023'}
             </Footer>
         </Layout>
     );

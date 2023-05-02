@@ -1,6 +1,6 @@
 import { shuffle } from 'lodash';
 import { Rank, Suit, decksInGameCount } from '../constants';
-import { Card } from '../types';
+import { CardType } from '../types';
 
 const getRandomNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -9,7 +9,7 @@ const getRandomNumber = (min: number, max: number) => {
 export class Deck {
     static readonly _ranks = Object.keys(Rank) as (keyof typeof Rank)[];
     static readonly _suits = Object.keys(Suit) as (keyof typeof Suit)[];
-    static readonly _deck: Card[] = this._ranks
+    static readonly _deck: CardType[] = this._ranks
         .map((rank) => {
             return this._suits.map((suit) => ({
                 rank,
@@ -18,7 +18,7 @@ export class Deck {
         })
         .flat();
 
-    static shuffle(): Card[] {
+    static shuffle(): CardType[] {
         const decs = shuffle(Array(decksInGameCount).fill(this._deck).flat());
         return decs;
     }

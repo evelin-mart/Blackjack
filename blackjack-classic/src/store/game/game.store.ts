@@ -26,16 +26,6 @@ const initialSeat: SeatState = {
     blackjackCount: 0,
 };
 
-const initialSeats = Array(7)
-    .fill(0)
-    .reduce((acc, _, id) => {
-        acc[id + 1] = {
-            ...initialSeat,
-            id: id + 1,
-        };
-        return acc;
-    }, {});
-
 const initialDealer = {
     score: 0,
     cards: [],
@@ -44,6 +34,14 @@ const initialDealer = {
 const initialStack = [0];
 
 const initialIds = [1, 2, 3, 4, 5, 6, 7];
+
+const initialSeats = initialIds.reduce((acc, id) => {
+    acc[id] = {
+        ...initialSeat,
+        id: id,
+    };
+    return acc;
+}, {} as typeof initialState.seats.byId);
 
 const initialState: GameState = {
     redCardPos: Deck.getRedCardPos(),
@@ -117,7 +115,7 @@ export const GameSlice = createSlice({
             seat.cards.push(card);
             const score = calculateScore(seat.cards);
             seat.score = score;
-            if (seat.cards.length === 2 && seat.score === 21) {
+            if (seat.cards.length === 2 && score === 21) {
                 seat.status = SeatStatus.BJ;
                 if ('originID' in seat) {
                     state.seats.byId[seat.originID!].blackjackCount += 1;
@@ -152,13 +150,13 @@ export const GameSlice = createSlice({
                 },
                 { status: SeatStatus.LOSE, payout: 0 },
             );
-        },
-        resetState(state) {
-            state.status = GameStatus.BETS;
             if (state.deck.length <= state.redCardPos) {
                 state.deck = Deck.shuffle();
                 state.redCardPos = Deck.getRedCardPos();
             }
+        },
+        placeBets(state) {
+            state.status = GameStatus.BETS;
             state.dealer = {
                 score: 0,
                 cards: [],
@@ -179,6 +177,19 @@ export const GameSlice = createSlice({
             state.playingSeat = null;
             state.stack = [0];
         },
+        reset(state) {
+            state.dealer = initialState.dealer;
+            state.deck = Deck.shuffle();
+            state.redCardPos = Deck.getRedCardPos();
+            state.player = initialState.player;
+            state.playingSeat = null;
+            state.seats = {
+                byId: initialSeats,
+                allIds: initialIds,
+            };
+            state.stack = initialStack;
+            state.status = GameStatus.BETS;
+        },
         stand(state) {
             state.playingSeat = state.stack.pop()!;
         },
@@ -194,9 +205,10 @@ export const {
     splitPair,
     endGame,
     stand,
-    resetState,
+    placeBets,
     doubleBet,
     startGame,
     leaveSeat,
     takeSeat,
+    reset,
 } = GameSlice.actions;

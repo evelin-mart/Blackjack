@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { GameStatus, addBalance, resetState, useAppDispatch, useGame, useUser } from '../../store';
+import { GameStatus, addBalance, reset, useAppDispatch, useGame, useUser } from '../../store';
 import { DollarOutlined, EuroOutlined, PoundOutlined } from '@ant-design/icons';
 import { ROUTES, Signs } from '../../constants';
 import { Button, Modal, Space, Tag } from 'antd';
@@ -28,7 +28,7 @@ export const Stats = () => {
                     Modal.success({
                         title: 'Thanks for the game! Come back again!',
                         onOk: () => {
-                            dispatch(resetState());
+                            dispatch(reset());
                             Modal.destroyAll();
                             navigate(ROUTES.LOBBY);
                         },
@@ -41,7 +41,7 @@ export const Stats = () => {
                     if (totalBet > 0 && status === GameStatus.BETS) {
                         dispatch(addBalance(totalBet));
                     }
-                    dispatch(resetState());
+                    dispatch(reset());
                     navigate(ROUTES.LOBBY);
                 },
             });

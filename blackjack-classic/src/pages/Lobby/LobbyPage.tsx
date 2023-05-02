@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Card, Space, Tag } from 'antd';
-import img from '../../assets/mock.jpg';
+import img from '../../assets/table.png';
 import { useUser } from '../../store';
 import { ROUTES, Signs } from '../../constants';
 import { useNavigate } from 'react-router';
@@ -17,7 +17,7 @@ export const LobbyPage = () => {
         <Space>
             <Card
                 title="Blackjack classic"
-                cover={<img alt="Blackjack classic" src={img} />}
+                cover={<img alt="Blackjack classic" src={img} style={{ width: 300 }} />}
                 hoverable
                 bodyStyle={{ padding: 0 }}
                 extra={<Tag color="geekblue">{Signs[currency]}5</Tag>}

@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 import styles from './actions.styles.module.css';
 import { Actions } from '../../../constants/actions';
 import { ReactComponent as Hit } from '../../../assets/plus.svg';
@@ -8,26 +7,19 @@ import { ReactComponent as Split } from '../../../assets/split.svg';
 import { Tooltip } from 'antd';
 import { Portal } from '../Portal';
 import { RoundButton } from '../../buttons';
+import { useActions } from '../../../hooks';
+import { SeatState } from '../../../store';
 
 type Props = {
-    isOpen: boolean;
-    onHitCard: () => void;
-    onStand: () => void;
-    onDoubleDown: () => void;
-    onSplit: () => void;
-    isSplittable: boolean;
-    canDoubleDown: boolean;
+    seat: SeatState;
+    balance: number;
+    playingSeat: number | null;
 };
 
-export const ActionsModal = ({
-    isOpen,
-    canDoubleDown,
-    isSplittable,
-    onDoubleDown,
-    onHitCard,
-    onSplit,
-    onStand,
-}: Props) => {
+export const ActionsModal = ({ balance, playingSeat, seat }: Props) => {
+    const { isOpen, canDoubleDown, canSplit, onDoubleDown, onHitCard, onSplit, onStand } =
+        useActions({ balance, playingSeat, seat });
+
     return (
         <Portal open={isOpen}>
             <div className={styles.content}>
@@ -48,7 +40,7 @@ export const ActionsModal = ({
                         <Stand fill="#ffffffd9" style={{ width: '100%', height: '100%' }} />
                     </Tooltip>
                 </RoundButton>
-                <RoundButton className={styles.blue} onClick={onSplit} isAvailable={isSplittable}>
+                <RoundButton className={styles.blue} onClick={onSplit} isAvailable={canSplit}>
                     <Tooltip title={Actions.SPLIT}>
                         <Split fill="#ffffffd9" />
                     </Tooltip>

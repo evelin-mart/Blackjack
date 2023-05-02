@@ -23,3 +23,7 @@
     transform: scale(1.1);
     box-shadow: 0 0 2px 3px var(--soft-white);
 }
+
+.button:hover {
+    box-shadow: 0 0 5px 1px var(--soft-white);
+}

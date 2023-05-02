@@ -1,4 +1,4 @@
-import { useAuthorization } from '../../../hooks/authorization';
+import { useAuthorization } from '../../../hooks';
 import { Button, Form } from 'antd';
 import { UserFormFields } from '../types';
 import { LoginInput } from '../LoginInput';

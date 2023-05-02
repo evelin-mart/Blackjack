@@ -11,10 +11,10 @@ export const useDealer = () => {
     const isDealerTurn = playingSeat === 0;
 
     useEffect(() => {
-        let timeout: NodeJS.Timeout;
+        let timeout: ReturnType<typeof setTimeout>;
         if (isDealerTurn) {
+            setShownScore(score);
             timeout = setTimeout(() => {
-                setShownScore(score);
                 if (score < 17) {
                     dispatch(hitCardDealer());
                 } else {

@@ -1,70 +1,27 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Space } from 'antd';
 import { Seat } from '../Seat';
-import {
-    GameStatus,
-    SeatState,
-    addBalance,
-    leaveSeat,
-    reduceBalance,
-    takeSeat,
-    useAppDispatch,
-    useGame,
-    useUser,
-} from '../../../../store';
+import { GameStatus } from '../../../../store';
 import styles from './playerseat.styles.module.css';
 import { Chip } from '../../../chip';
 import classNames from 'classnames';
+import { useSeat } from '../../../../hooks';
 
 type Props = {
-    seat: SeatState;
-    balance: number;
+    id: number;
 };
 
-export const PlayerSeat = ({ seat, balance }: Props) => {
-    const { login } = useUser();
-    const { seats, player, status, playingSeat } = useGame();
-    const dispatch = useAppDispatch();
-    
-    const canBeTaken =
-        !seat.player &&
-        ((player.bets.length && balance >= seats.byId[player.bets[0]].amount) ||
-            !player.bets.length) &&
-        status === GameStatus.BETS;
+export const PlayerSeat = ({ id }: Props) => {
+    const { canBeTaken, take, leave, seat, splittedSeat, playingSeat, status, balance } =
+        useSeat(id);
+
     const style = classNames(styles.bet, { [styles.active]: canBeTaken });
-
-    const take = useCallback(() => {
-        if (canBeTaken) {
-            const amount = player.bets.length ? seats.byId[player.bets[0]].amount : 0;
-            if (amount > 0) {
-                dispatch(reduceBalance(amount));
-            }
-            dispatch(
-                takeSeat({
-                    id: seat.id,
-                    player: login,
-                    amount,
-                }),
-            );
-        }
-    }, [canBeTaken, seats, player]);
-
-    const leave = useCallback(() => {
-        if (seat.amount) {
-            dispatch(addBalance(seat.amount));
-        }
-        dispatch(leaveSeat(seat.id));
-    }, [seat]);
 
     return (
         <div className={styles.wrapper}>
             <Space size={25}>
-                {seat.splittedID && (
-                    <Seat
-                        seat={seats.byId[seat.splittedID]}
-                        balance={balance}
-                        playingSeat={playingSeat}
-                    />
+                {splittedSeat && (
+                    <Seat seat={splittedSeat} balance={balance} playingSeat={playingSeat} />
                 )}
                 <Seat seat={seat} balance={balance} playingSeat={playingSeat} />
             </Space>
