@@ -1,0 +1,10 @@
+.layout {
+    background: center / cover no-repeat url(../../assets/bg.jpg);
+    background-attachment: fixed;
+    padding: 20px 50px;
+}
+
+.footer {
+    background-color: var(--dark-blue);
+    color: rgba(255, 255, 255, 0.65);
+}
