@@ -9,6 +9,7 @@ export const store = configureStore({
         [UserSlice.name]: UserSlice.reducer,
         [GameSlice.name]: GameSlice.reducer,
     },
+    devTools: true,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(saveUserDataMiddleware),
 });
 

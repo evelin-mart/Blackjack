@@ -36,7 +36,7 @@ export const PlaceBetsModal = ({ balance, player, seats, status }: Props) => {
                 </RoundButton>
             </div>
             <RoundButton onClick={handleAcceptBets}>
-                <Tooltip title="ACCEPT BETS">
+                <Tooltip title="ACCEPT BETS" placement="bottom">
                     <Accept fill="#ffffffd9" />
                 </Tooltip>
             </RoundButton>
