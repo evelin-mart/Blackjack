@@ -1,29 +1,69 @@
 .wrapper {
     position: relative;
-    width: 47px;
-    height: 64px;
+    width: 56.4px;
+    height: 76.8px;
     border: 1px solid var(--soft-white);
-    border-radius: 3px;
+    border-radius: 7px;
 }
 
 .card {
     position: absolute;
     top: 0;
     left: 0;
-    width: 47px;
-    height: 64px;
+    width: 56.4px;
+    height: 76.8px;
 }
 
 .status {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 35%;
+    left: 90%;
+    z-index: 500;
+}
+
+.icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border-width: 3px;
+    border-style: solid;
+}
+
+.success {
+    border-color: var(--gold);
+    background: center / 27.5px url('../../../assets/success.svg') no-repeat, rgba(0, 0, 0, 0.8);
+}
+
+.loose {
+    border-color: red;
+    background: center / 27.5px url('../../../assets/fail.svg') no-repeat, rgba(0, 0, 0, 0.8);
+}
+
+.push {
+    border-color: var(--soft-white);
+    background: center / 27.5px url('../../../assets/push.svg') no-repeat, rgba(0, 0, 0, 0.8);
 }
 
 .score {
     position: absolute;
-    top: 57px;
-    left: 10px;
-    width: 27px;
+    top: 70px;
+    left: calc(50% - 14px);
+    width: 28px;
     text-align: center;
+}
+
+.active {
+    animation: blinking 1s infinite ease-in-out;
+}
+
+@keyframes blinking {
+    0% {
+        box-shadow: 0 0 1px 1px white;
+    }
+    50% {
+        box-shadow: 0 0 5px 5px yellow;
+    }
+    100% {
+        box-shadow: 0 0 1px 1px white;
+    }
 }

@@ -6,6 +6,7 @@ import { LoginInput } from '../LoginInput';
 import { PasswordInput } from '../PasswordInput';
 import { Button, Select, Form, Modal } from 'antd';
 import { ConfirmPasswordInput } from '../ConfirmPasswordInput';
+import { useCallback } from 'react';
 
 interface SignUpForm {
     login: string;
@@ -22,23 +23,26 @@ export const SignUpForm = () => {
     const { registerUser } = useAuthorization();
     const [form] = Form.useForm<SignUpForm>();
 
-    const onSubmit = ({ login, password, currency }: SignUpForm) => {
-        if (getUserFromLocalStorage(login)) {
-            form.setFields([
-                {
-                    name: UserFormFields.Login,
-                    errors: ['User already exists!'],
-                },
-            ]);
-            return;
-        } else {
-            registerUser({ login, password }, currency);
-            Modal.success({
-                title: 'You get a signup bonus!',
-                content: `${Signs[currency]}${registrationBonus}`,
-            });
-        }
-    };
+    const onSubmit = useCallback(
+        ({ login, password, currency }: SignUpForm) => {
+            if (getUserFromLocalStorage(login)) {
+                form.setFields([
+                    {
+                        name: UserFormFields.Login,
+                        errors: ['User already exists!'],
+                    },
+                ]);
+                return;
+            } else {
+                registerUser({ login, password }, currency);
+                Modal.success({
+                    title: 'You get a signup bonus!',
+                    content: `${Signs[currency]}${registrationBonus}`,
+                });
+            }
+        },
+        [form, registerUser],
+    );
 
     return (
         <Form

@@ -6,15 +6,20 @@
 }
 
 .bet {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 35px;
     height: 35px;
     margin-top: 10px;
     border-radius: 50%;
     border: 1px solid var(--soft-white);
     text-align: center;
+    z-index: 1500;
 }
 
 .user {
+    height: 21px;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -30,7 +35,40 @@
     border-radius: 50%;
 }
 
+.leave {
+    width: 13px;
+    height: 13px;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 13px;
+    background-color: rgba(85, 85, 85, 0.85);
+    color: var(--soft-white);
+    border-radius: 50%;
+    z-index: 1500;
+    cursor: pointer;
+    user-select: none;
+}
+
 .login {
     color: var(--gold);
     opacity: 0.96;
+    font-weight: bold;
+    text-shadow: 0 0 1px black;
+}
+
+.active {
+    animation: blinking 1s infinite ease-in-out;
+    cursor: pointer;
+}
+
+@keyframes blinking {
+    0% {
+        box-shadow: 0 0 1px 1px white;
+    }
+    50% {
+        box-shadow: 0 0 5px 5px yellow;
+    }
+    100% {
+        box-shadow: 0 0 1px 1px white;
+    }
 }

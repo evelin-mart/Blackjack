@@ -1,0 +1,39 @@
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    color: white;
+    border-radius: 50%; 
+    cursor: pointer;
+}
+
+.red {
+    background-color: rgba(245, 56, 56, 0.9);
+}
+
+.green {
+    background-color: rgba(6, 126, 6, 0.9);
+}
+
+.orange {
+    background-color: rgba(255, 166, 0, 0.9);
+}
+
+.blue {
+    background-color: rgba(0, 208, 255, 0.9);
+}
+
+.inactive {
+    opacity: 0.5;
+    cursor: default;
+    background-color: rgba(0, 0, 0, 0.5);
+}

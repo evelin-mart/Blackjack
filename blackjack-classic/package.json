@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint"
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
@@ -19,7 +20,8 @@
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "react-router": "^6.10.0",
-    "react-router-dom": "^6.10.0"
+    "react-router-dom": "^6.10.0",
+    "vite-plugin-svgr": "^2.4.0"
   },
   "devDependencies": {
     "@types/jsrsasign": "^10.5.8",

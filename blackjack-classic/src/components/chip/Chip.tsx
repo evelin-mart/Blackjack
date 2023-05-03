@@ -1,31 +1,15 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styles from './chip.styles.module.css';
 import { colorPicker } from './utils';
-import { addBets, reduceBalance, useAppDispatch, useUser } from '../../store';
+import classNames from 'classnames';
 
 type Props = {
     value: number;
-    isActive?: boolean;
 };
 
-export const Chip = ({ value, isActive = true }: Props) => {
-    const user = useUser();
-    const dispatch = useAppDispatch();
-
+export const Chip = ({ value }: Props) => {
     const color = colorPicker(value);
+    const style = classNames(styles.chip, styles[color]);
 
-    const handleClick = useCallback(() => {
-        if (isActive) {
-            if (value <= user.balance[user.currency]) {
-                dispatch(reduceBalance(value));
-                dispatch(addBets(value));
-            }
-        }
-    }, [dispatch, value]);
-
-    return (
-        <div className={`${styles.chip} ${styles[color]}`} onClick={handleClick}>
-            {value}
-        </div>
-    );
+    return <div className={style}>{value}</div>;
 };

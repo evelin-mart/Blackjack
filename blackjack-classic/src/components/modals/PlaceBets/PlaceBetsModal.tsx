@@ -1,65 +1,45 @@
-import React, { useCallback, useState } from 'react';
-import classNames from 'classnames';
+import React from 'react';
 import styles from './placebets.styles.module.css';
-import { Chip } from '../../chip';
-import {
-    addBalance,
-    clearBets,
-    reduceBalance,
-    restoreBets,
-    useAppDispatch,
-    useGame,
-    useUser,
-} from '../../../store';
+import { ReactComponent as Undo } from '../../../assets/undo.svg';
+import { ReactComponent as Redo } from '../../../assets/redo.svg';
+import { ReactComponent as Accept } from '../../../assets/success.svg';
+import { Tooltip } from 'antd';
+import { Portal } from '../Portal';
+import { ChipButton, RoundButton } from '../../buttons';
+import { Props } from './placebets.types';
+import { useBets } from '../../../hooks';
 
-export const PlaceBetsModal = () => {
-    const game = useGame();
-    const user = useUser();
-    const dispatch = useAppDispatch();
-    const [isModalOpen, setIsModalOpen] = useState(true);
-
-    const totalBet = game.player.bets.reduce((acc, bet) => acc + game.seats.byId[bet].amount, 0);
-
-    const handleClose = useCallback(() => {
-        setIsModalOpen(false);
-    }, [setIsModalOpen]);
-
-    const style = classNames(styles.mask, { [styles.active]: isModalOpen });
-
-    const handleUndoBets = useCallback(() => {
-        dispatch(addBalance(totalBet));
-        dispatch(clearBets());
-    }, [totalBet, dispatch]);
-
-    const handleRestoreBets = useCallback(() => {
-        dispatch(addBalance(totalBet));
-        if (game.player.lastBet <= user.balance[user.currency] + totalBet) {
-            dispatch(reduceBalance(game.player.lastBet));
-            dispatch(restoreBets());
-        }
-    }, [dispatch, totalBet]);
+export const PlaceBetsModal = ({ balance, player, seats, status }: Props) => {
+    const { isOpen, isRedoAvailable, handleAcceptBets, handleRestoreBets, handleUndoBets } =
+        useBets({
+            balance,
+            player,
+            seats,
+            status,
+        });
 
     return (
-        <div className={style}>
-            <div className={styles.wrapper}>
-                <div className={styles.button} onClick={handleUndoBets} />
-                <div className={styles.button}>
-                    <Chip value={1} />
-                </div>
-                <div className={styles.button}>
-                    <Chip value={5} />
-                </div>
-                <div className={styles.button}>
-                    <Chip value={10} />
-                </div>
-                <div className={styles.button}>
-                    <Chip value={25} />
-                </div>
-                <div className={styles.button}>
-                    <Chip value={100} />
-                </div>
-                <div className={styles.button} onClick={handleRestoreBets} />
+        <Portal open={isOpen}>
+            <div className={styles.content}>
+                <RoundButton onClick={handleUndoBets} isAvailable={!!player.bets.length}>
+                    <Tooltip title="UNDO">
+                        <Undo />
+                    </Tooltip>
+                </RoundButton>
+                {[1, 5, 10, 25, 100].map((value) => (
+                    <ChipButton value={value} key={value} balance={balance} bets={player.bets} />
+                ))}
+                <RoundButton onClick={handleRestoreBets} isAvailable={isRedoAvailable}>
+                    <Tooltip title="REPEAT">
+                        <Redo />
+                    </Tooltip>
+                </RoundButton>
             </div>
-        </div>
+            <RoundButton onClick={handleAcceptBets}>
+                <Tooltip title="ACCEPT BETS" placement="bottom">
+                    <Accept fill="#ffffffd9" />
+                </Tooltip>
+            </RoundButton>
+        </Portal>
     );
 };

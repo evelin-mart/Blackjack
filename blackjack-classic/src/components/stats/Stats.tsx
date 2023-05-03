@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
-import { useGame, useUser } from '../../store';
+import { GameStatus, addBalance, reset, useAppDispatch, useGame, useUser } from '../../store';
 import { DollarOutlined, EuroOutlined, PoundOutlined } from '@ant-design/icons';
 import { ROUTES, Signs } from '../../constants';
-import { Button, Space, Tag } from 'antd';
+import { Button, Modal, Space, Tag } from 'antd';
 import { useNavigate } from 'react-router';
 
 const Items = {
@@ -13,14 +13,40 @@ const Items = {
 
 export const Stats = () => {
     const { currency, balance } = useUser();
-    const game = useGame();
+    const { status, seats, player } = useGame();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
-    const totalBet = game.player.bets.reduce((acc, bet) => acc + game.seats.byId[bet].amount, 0);
+    const totalBet = player.bets.reduce((acc, bet) => acc + seats.byId[bet].amount, 0);
 
     const handleClick = useCallback(() => {
-        navigate(ROUTES.LOBBY);
-    }, [navigate]);
+        if (status === GameStatus.PLAY) {
+            Modal.confirm({
+                title: 'Are you sure want to exit?',
+                content: 'You will lose your money!',
+                onOk: () =>
+                    Modal.success({
+                        title: 'Thanks for the game! Come back again!',
+                        onOk: () => {
+                            dispatch(reset());
+                            Modal.destroyAll();
+                            navigate(ROUTES.LOBBY);
+                        },
+                    }),
+            });
+        } else {
+            Modal.success({
+                title: 'Thanks for the game! Come back again!',
+                onOk: () => {
+                    if (totalBet > 0 && status === GameStatus.BETS) {
+                        dispatch(addBalance(totalBet));
+                    }
+                    dispatch(reset());
+                    navigate(ROUTES.LOBBY);
+                },
+            });
+        }
+    }, [navigate, totalBet, status]);
 
     return (
         <>
@@ -31,7 +57,8 @@ export const Stats = () => {
                     {balance[currency]}
                 </Tag>
                 <Tag color="#004b10">
-                    total bet {Signs[currency]}{totalBet}
+                    total bet {Signs[currency]}
+                    {totalBet}
                 </Tag>
             </Space>
             <Button type="link" onClick={handleClick}>

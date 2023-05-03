@@ -1,0 +1,19 @@
+.wrapper {
+    padding: 10px 60px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.7) 25%,
+        rgba(0, 0, 0, 0.8) 50%,
+        rgba(0, 0, 0, 0.7) 75%,
+        transparent 100%
+    );
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 0 0 1px black;
+    user-select: none;
+}

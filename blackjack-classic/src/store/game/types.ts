@@ -1,19 +1,20 @@
-import { Card } from '../../types/deck';
+import { CardType } from '../../types/deck';
 
 export enum SeatStatus {
     WIN = 'Win',
     LOSE = 'Lose',
     PUSH = 'Push',
     BUST = 'Bust',
-    BJ = 'Blackjack',
+    BJ = 'BJ',
 }
 
 export interface SeatState {
     id: number;
     score: number;
-    cards: Card[];
+    cards: CardType[];
     amount: number;
     status: SeatStatus | '';
+    player: string | null;
     blackjackCount: number;
     splittedID?: number;
     originID?: number;
@@ -32,17 +33,18 @@ export interface Player {
 
 export interface DealerState {
     score: number;
-    cards: Card[];
+    cards: CardType[];
 }
 
 export enum GameStatus {
+    BETS,
     PLAY,
-    OVER
+    OVER,
 }
 
 export interface GameState {
     redCardPos: number;
-    deck: Card[];
+    deck: CardType[];
     status: GameStatus;
     seats: {
         byId: {
@@ -50,7 +52,14 @@ export interface GameState {
         };
         allIds: number[];
     };
+    stack: number[];
     player: Player;
     dealer: DealerState;
-    playingSeat: number;
+    playingSeat: number | null;
+}
+
+export interface TakePlaceAction {
+    id: number;
+    player: string;
+    amount: number;
 }
