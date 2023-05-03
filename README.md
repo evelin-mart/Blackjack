@@ -31,6 +31,8 @@ https://blackjack-4bj.pages.dev
 -   link to Sign In for unauthorized user
 -   link to Lobby, Profile and Log Out button for authorized user
 
+![image](https://user-images.githubusercontent.com/95069824/236026484-c386a99a-bd5a-439b-908f-1165ccdb278b.png)
+
 ### **Sign in / Sign up pages**
 
 ---
@@ -57,11 +59,15 @@ https://blackjack-4bj.pages.dev
 -   button to update password
 -   button to delete account
 
+![image](https://user-images.githubusercontent.com/95069824/236026733-711073d4-1538-4eca-a392-a1222e598e5e.png)
+
 ### **Lobby**
 
 ---
 
 -   contain available tables with current currency and minimum bet
+
+![image](https://user-images.githubusercontent.com/95069824/236026870-92dbe108-c6b0-4da8-8646-6cb5511b28ff.png)
 
 ### **Footer in the game**
 
@@ -89,6 +95,8 @@ https://blackjack-4bj.pages.dev
 -   pointer on playing seat
 -   player is suggested to make a decision
 
+![image](https://user-images.githubusercontent.com/95069824/236027852-052be98c-0669-4e5c-88e9-5284b50329a8.png)
+
 ### **Rules**
 
 ---
@@ -103,6 +111,8 @@ https://blackjack-4bj.pages.dev
 -   dealer must hit on 16 and stay at 17
 -   if both dealer and player have blackjack the payoff wil be 1 : 1
 
+![image](https://user-images.githubusercontent.com/95069824/236027614-f50315ab-2e71-4f38-8b0f-7477bbb48cca.png)
+![table](https://user-images.githubusercontent.com/95069824/236027986-6d664d5e-67ba-4d8f-a77f-a2b71c1526fd.png)
 
 ---
 
